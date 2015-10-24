@@ -1,0 +1,87 @@
+
+<div class="row">
+<div class="divider"></div>
+  <div class="section">
+    <h5>Fenología</h5>
+    <p>Registrar nueva fenología.</p>
+    <div id="data"></div>
+
+  </div>
+  <div class="divider"></div>
+
+
+    <form class="col s12">
+      <div class="row">
+        <div class="left-align">Predio:</div>
+        <div class="input-field col s12">
+            <select class="browser-default" id="PredioSelect" onchange="rowLote();">
+              <option value="" selected>Seleccione Predio</option>
+            </select>
+        </div>
+      </div>
+      <div class="row">
+        <div class="left-align">Lote:</div>
+        <div class="input-field col s12">
+            <select class="browser-default" id="LoteSelect" onchange="rowSublote();">
+              <option value="" selected>Seleccione Predio primero</option>
+            </select>
+        </div>
+      </div>
+      <div class="row">
+        <div class="left-align">Sublote:</div>
+        <div class="input-field col s12">
+            <select class="browser-default" id="SubloteSelect" onchange="rowVarietal();">
+              <option value="" selected>Seleccione Lote primero</option>
+            </select>
+        </div>
+      </div>
+      <div class="row">
+        <div class="left-align">Varietal:</div>
+        <div class="input-field col s12">
+            <select class="browser-default" id="VarietalSelect">
+              <option value="" selected>Seleccione Sublote primero</option>
+            </select>
+        </div>
+      </div>
+      <div class="row">
+        <div class="left-align">Fenologia:</div>
+        <div class="input-field col s12">
+            <select class="browser-default" id="FenologiaSelect">
+              <option value="" selected>Seleccione Fenologia</option>
+            </select>
+        </div>
+      </div>
+      <div class="row">
+        <div class="input-field col s12">
+            <input type="date" class="datepicker" id="Fecha" value="">
+            <label for="textarea1">Fecha</label>
+
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="input-field col s12">
+          <textarea class="materialize-textarea" id="Observaciones" value=""></textarea>
+          <label for="textarea1">Observaciones</label>
+        </div>
+      </div>
+      <div class="row center-align">
+          <a class="waves-effect waves-light btn" onclick="fenologiaUp();">
+            Guardar
+          </a>
+      </div>
+
+    </form>
+</div>
+
+  <script>
+        $(document).ready(function() {
+         rowPredio();
+         rowEfenologia();
+            $('.datepicker').pickadate({
+                selectMonths: true,
+                selectYears: 15
+            });
+
+          });
+  </script>

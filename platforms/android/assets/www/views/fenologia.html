@@ -1,0 +1,145 @@
+ <div class="row" id="viewsFenologia">
+    <div class="fixed-action-btn">
+        <a class="btn-floating btn-large indigo darken-2" onclick="altaFenologia();">
+          <i class="fa fa-plus"></i>
+        </a>
+      </div>
+    <div class="divider"></div>
+      <div class="section">
+        <h5>Fenología</h5>
+        <p>Registros</p>
+      </div>
+      <div class="divider"></div>
+
+        <table  class=" bordered striped centered responsive-table z-depth-3" id="tableFenologia">
+            <thead>
+              <tr>
+                  <th data-field="fecha">Fecha</th>
+                  <th data-field="predio">Predio</th>
+                  <th data-field="lote">Lote</th>
+                  <th data-field="sublote">Sublote</th>
+                  <th data-field="ver">Ver</th>
+                  <th data-field="editar">Editar</th>
+              </tr>
+            </thead>
+            <tbody id='bodyTable'>
+
+            </tbody>
+        </table>
+</div>
+
+<div class="row" id="viewsFenologiaShow">
+<div class="divider"></div>
+  <div class="section">
+    <h5>Fenología</h5>
+    <p>Ver nueva fenología.</p>
+    <div id="data"></div>
+
+  </div>
+  <div class="divider"></div>
+     <table  class=" bordered striped centered responsive-table z-depth-3" id="tableFenologia">
+            <thead>
+              <tr>
+                  <th data-field="predio">Predio</th>
+                  <th data-field="lote">Lote</th>
+                  <th data-field="sublote">Sublote</th>
+                  <th data-field="sublote">Varietal</th>
+                  <th data-field="sublote">Fenologia</th>
+                  <th data-field="fecha">Fecha</th>
+                  <th data-field="editar">Observaciones</th>
+              </tr>
+            </thead>
+            <tbody id='bodyTableShow'>
+
+            </tbody>
+        </table>
+</div>
+
+<div class="row" id="viewsFenologiaEdit">
+    <input type="hidden" name="idInput" id="idInput" value="">
+
+<div class="divider"></div>
+  <div class="section">
+    <h5>Fenología</h5>
+    <p>Editar nueva fenología.</p>
+    <div id="data"></div>
+
+  </div>
+  <div class="divider"></div>
+    <form class="col s12">
+      <div class="row">
+        <div class="left-align">Predio:</div>
+        <div class="input-field col s12">
+            <select class="browser-default" id="PredioSelect" onchange="rowLote();">
+              <option value="" selected>Seleccione Predio</option>
+            </select>
+        </div>
+      </div>
+      <div class="row">
+        <div class="left-align">Lote:</div>
+        <div class="input-field col s12">
+            <select class="browser-default" id="LoteSelect" onchange="rowSublote();">
+              <option value="" selected>Seleccione Predio primero</option>
+            </select>
+        </div>
+      </div>
+      <div class="row">
+        <div class="left-align">Sublote:</div>
+        <div class="input-field col s12">
+            <select class="browser-default" id="SubloteSelect" onchange="rowVarietal();">
+              <option value="" selected>Seleccione Lote primero</option>
+            </select>
+        </div>
+      </div>
+      <div class="row">
+        <div class="left-align">Varietal:</div>
+        <div class="input-field col s12">
+            <select class="browser-default" id="VarietalSelect">
+              <option value="" selected>Seleccione Sublote primero</option>
+            </select>
+        </div>
+      </div>
+      <div class="row">
+        <div class="left-align">Fenologia:</div>
+        <div class="input-field col s12">
+            <select class="browser-default" id="FenologiaSelect">
+              <option value="" selected>Seleccione Fenologia</option>
+            </select>
+        </div>
+      </div>
+      <div class="row">
+        <div class="input-field col s12">
+            <input type="date" class="datepicker" id="Fecha" value="">
+            <label for="textarea1">Fecha</label>
+
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="input-field col s12">
+          <textarea class="materialize-textarea" id="Observaciones" value=""></textarea>
+          <label for="textarea1">Observaciones</label>
+        </div>
+      </div>
+      <div class="row center-align">
+          <a class="waves-effect waves-light btn" onclick="fenologiaUpdate();">
+            Guardar
+          </a>
+      </div>
+
+    </form>
+</div>
+
+
+   <script>
+        $(document).ready(function() {
+			       rowfenologia();
+              $( "#viewsFenologiaEdit" ).hide();
+              $( "#viewsFenologiaShow" ).hide();
+            $('.datepicker').pickadate({
+                selectMonths: true,
+                selectYears: 15
+            });
+
+          });
+  </script>
