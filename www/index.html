@@ -16,19 +16,23 @@
     <div class="navbar-fixed">
         <nav>
             <div class="nav-wrapper indigo darken-2">
-              <a class="brand-logo">VINEA</a>
+              <a class="brand-logo">VINEA - VINIFICACIÓN</a>
                 <a href="#" data-activates="mobile-demo" class="button-collapse">
                     <i class="fa  fa-bars fa-lg"></i> 
                 </a>
               <ul class="right hide-on-med-and-down">
                 <li><a id="fenologia-mnu" onclick="inicio();">Inicio</a></li>
-                <li><a id="fenologia-mnu" onclick="fenologiaIndex();">Fenología</a></li>
+                <li><a id="fenologia-mnu" onclick="maduraIndex();">Maduración</a></li>
+                <li><a id="fenologia-mnu" onclick="pesoIndex();">Cálculo de peso</a></li>
+                <li><a id="fenologia-mnu" href="grafica.html">Grafica</a></li>
                 <li><a id="fenologia-mnu" onclick="hostView();">Host</a></li>
                 <li><a id="fenologia-mnu" onclick="salir();">Salir</a></li>
               </ul>
               <ul class="side-nav" id="mobile-demo">
                 <li><a id="fenologia-mnu" onclick="inicio();">Inicio</a></li>
-                <li><a id="fenologia-mnu" onclick="fenologiaIndex();">Fenología</a></li>
+                <li><a id="fenologia-mnu" onclick="maduraIndex();">Maduración</a></li>
+                <li><a id="fenologia-mnu" onclick="pesoIndex();">Cálculo de peso</a></li>
+                <li><a id="fenologia-mnu" href="grafica.html">Grafica</a></li>
                 <li><a id="fenologia-mnu" onclick="hostView();">Host</a></li>
                 <li><a id="fenologia-mnu" onclick="salir();">Salir</a></li>
               </ul>
@@ -37,11 +41,10 @@
   </div>
     <div class="container">
         <div class="section center-align" id="conexionInfo">
-                <h5 class="center-align card-panel teal white-text hoverable flow-text" onclick="sincronizar();">
-                    Tiene conexion a internet, de click en este mensaje para sincronizar
-                </h5>
+            <h5 class="center-align card-panel teal white-text hoverable flow-text" onclick="sincronizar();">
+                Tiene conexion a internet, de click en este mensaje para sincronizar
+            </h5>
         </div>
-
         <div class="section center-align" id="body">
             <img class="responsive-img z-depth-3" src="img/vinea.jpg" >
         </div>

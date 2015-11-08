@@ -15,6 +15,11 @@
         <param name="android-package" value="org.apache.cordova.networkinformation.NetworkManager" />
     </feature>
     <allow-intent href="market:*" />
+    <icon src="www/img/icon.png" />
+    <icon density="ldpi" src="www/img/icon.png" width="150" />
+    <icon density="mdpi" src="www/img/icon.png" width="150" />
+    <icon density="hdpi" src="www/img/icon.png" width="150" />
+    <icon density="xhdpi" src="www/img/icon.png" width="150" />
     <name>Vinificacion</name>
     <description>
         A sample Apache Cordova application that responds to the deviceready event.

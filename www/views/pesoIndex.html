@@ -1,0 +1,170 @@
+<div id="index">
+    <div class="fixed-action-btn">
+      <a class="btn-floating btn-large indigo darken-2" onclick="altaPeso();">
+         <i class="fa fa-plus"></i>
+      </a>
+    </div>
+    <center>
+      <h1>Cálculo de peso</h1>
+    </center>
+    <table class="responsive-table striped">
+        <thead>
+          <tr>
+              <th data-field="id">Id</th>
+              <th data-field="name">Fecha</th>
+              <th data-field="sublote">Sublote</th>
+              <th data-field="bloque">Bloque</th>
+              <th data-field="ver">Acción</th>
+          </tr>
+        </thead>
+        <tbody id="bodyPeso">
+          
+        </tbody>
+    </table>
+</div>
+<div id="alta">
+<center>
+    <div class="row">
+      <div class="col s12">
+        <ul class="tabs">
+          <li class="tab col s6 waves-effect waves-light"><a href="#confi">Configuración</a></li>
+          <li class="tab col s6 waves-effect waves-light"><a class="active" href="#regi">Registro</a></li>
+        </ul>
+      </div>
+      <div id="confi" class="col s12">
+            <h4>Configuración</h4>
+            <div class="input-field col s12">
+                  <label>Rancho:</label><br><br>
+                  <select class="browser-default" id="rancho" onchange="rowLote();">
+                    <option value="" selected>Seleccione Rancho</option>
+                  </select>
+            </div>
+            <div class="input-field col s12">
+                  <label>Viñedo:</label><br><br>
+                  <select class="browser-default"  id="vinedo" onchange="rowSublote();">
+                    <option value="" selected>Seleccione Viñedo</option>
+                  </select>
+            </div>
+            <div class="input-field col s12">
+                  <label>Variedad:</label><br><br>
+                  <select class="browser-default" id="variedad" onchange="rowBloque();">
+                    <option value="" selected>Seleccione Variedad</option>
+                  </select>
+            </div>
+            <div class="input-field col s12">
+                  <label>Bloque:</label><br><br>
+                  <select class="browser-default" id="bloque">
+                    <option value="" selected>Seleccione Bloque</option>
+                  </select>
+            </div>
+
+            <div class="input-field col s12">
+                  <label>Añada:</label><br/><br/>
+                  <select class="browser-default" id="anada">
+                      <option value="" selected>Seleccione Añada</option>
+                  </select><br/>  
+                  <a class="waves-effect waves-light btn" onclick="saveConfig();">Guardar</a>
+            </div>
+      </div>
+      <div id="regi" class="col s12">
+          <h4>Nuevo Registro</h4>
+          <div class="input-field col s12">
+                <label for="birthdate">Fecha registro</label>
+                <input id="birthdate" type="text" class="datepicker">
+          </div>
+          <div class="input-field col s12">
+              <input type="text" length="10">
+              <label for="input_text">Costo de la uva (Pesos)</label>
+          </div>
+          <div class="input-field col s12">
+              <input type="text" length="10">
+              <label for="input_text">Peso total de la uva</label>
+          </div>
+          <div class="input-field col s12" id="calculoPeso">
+              <p>Peso total neto</p>
+              <input type="text" length="10"  disabled="true">
+          </div>
+          <div class="input-field col s12" id="calculoCajas" >
+              <input type="text" length="10" >
+              <label for="input_text">Total de cajas</label>
+          </div>
+          <div class="input-field col s12">
+               <p>
+                <input type="checkbox" id="checkInput" />
+                <label for="checkInput">CALCULAR PESO TOTAL NETO</label>
+              </p><br>
+          </div> 
+          <br>
+          <fieldset id="fieldCajas">
+            <legend>Cálculo de cajas:</legend>
+
+            <div class="input-field col s12">
+              <p>CAJAS DE LA MUESTRA</p>
+              <input type="text" length="10" readonly="true" id="cajasMuestra">
+            </div>
+            <div class="input-field col s12">
+              <input type="text" length="10">
+              <label for="input_text">Tara cajas</label>
+            </div>
+            <div class="input-field col s12">
+              <p>Peso total neto de la muestra</p>
+              <input type="text" length="10" disabled="true" id="pesoMuestra">
+            </div>
+                <a class="waves-effect waves-light btn" onclick="newBox();">agregar caja</a>
+            <div id="cajas col s12">
+              <h3> Lista de cajas </h3>
+                <div id="CajasAcumuladas">
+                    <div class='input-field col s12' id='divBox1'>
+                      <div class="input-field col s2">
+                         <p>
+                           <i class="fa fa-circle"></i>
+                         </p>
+                      </div>
+                      <div class="input-field col s8">
+                        <input type="text" length="10" id="caja[]" name="caja[]" >
+                        <label for="input_text">PESO (KG)</label>
+
+                      </div>
+                      <div class="input-field col s2">
+                        <a class="waves-effect waves-teal btn-flat" onclick="deleteBox(1);"><i class="fa fa-times"></i></a>
+                      </div>
+                    </div>
+                  <div  id="newCajas">
+                  </div>
+                </div>
+            </div>
+          </fieldset>   
+
+          <br> <a class="waves-effect waves-light btn" onclick="saveMaduracion();">Guardar</a>
+
+      </div>
+    </div>
+  </center>
+</div>
+
+<script>
+    $(document).ready(function(){ 
+      $('.datepicker').pickadate({
+          selectMonths: true, 
+          selectYears: 15
+        });
+      $('#alta').hide();
+      $('#calculoPeso').hide();
+      $('#calculoCajas').hide();
+      $('#fieldCajas').hide();
+
+      $('#checkInput').change(function() {
+        if($(this).is(":checked")) {
+            $('#calculoPeso').show();
+            $('#calculoCajas').show();
+            $('#fieldCajas').show();
+            $('#cajasMuestra').val(1);
+        }else{
+          $('#calculoPeso').hide();
+          $('#calculoCajas').hide();
+          $('#fieldCajas').hide();
+        }       
+      });
+
+    });
+</script>
