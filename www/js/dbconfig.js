@@ -12,113 +12,50 @@ function dropTable(table) {
   });
 }
 
-function editFenologia(id){
-  var db = dbInicializar();
-  var html="";
-  var predioId=loteId=subloteId=fenologiaId=fecha=observaciones="";
-  db.transaction(function(t) {
-    t.executeSql("SELECT * FROM fenologia where id = ?", [id], function(transaction, results) {
-      for (var i = 0; i < results.rows.length; i++) {
-        var row = results.rows.item(i);
-            predioId=row.predioId;
-            loteId=row.loteId;
-            subloteId=row.subloteId;
-            fenologiaId=row.fenologiaId;
-            fecha=row.fecha;
-            observaciones=row.observaciones;
-  rowPredio();
-  rowEfenologia();
-  $( "#idInput" ).val(id);
-  $( "#Fecha" ).val(fecha);
-  $( "#Observaciones" ).val(observaciones);
-  setTimeout(function(){  $( "#rancho" ).val(predioId);  rowLote(); }, 520);
-  setTimeout(function(){  $( "#vinedo" ).val(loteId);  }, 600);
-  setTimeout(function(){   rowSublote(); }, 700);
-  setTimeout(function(){  $( "#variedad" ).val(subloteId); }, 860);
-
-
+/************* Guardar configuración del usuario ************************/
+  function saveConfig() {
+   
+      var rancho = $('#rancho option:selected').val();
+      var vinedo = $('#vinedo option:selected').val();
+      var variedad = $('#variedad option:selected').val();
+      var bloque = $('#bloque option:selected').val();
+      var anada = $('#anada option:selected').val();
+      var ranchoName = $('#rancho option:selected').text();
+      var vinedoName = $('#vinedo option:selected').text();
+      var variedadName = $('#variedad option:selected').text();
+      var bloqueName = $('#bloque option:selected').text();
+      var anadaName = $('#anada option:selected').text();
+      if(rancho != '' && vinedo != '' && variedad != '' && bloque != '' && anada){
+        configRegister(rancho, vinedo, variedad, bloque, anada,ranchoName, vinedoName, variedadName, bloqueName, anadaName);
       }
-    });
-  });
-
-}
-
-function fenologiaUpdate() {
-      var inputId      = $( "#idInput" ).val();
-      var predioId      = $( "#rancho" ).val();
-      var loteId        = $( "#vinedo" ).val();
-      var subloteId     = $( "#variedad" ).val();
-      var fenologiaId   = $( "#FenologiaSelect" ).val();
-      var predioText      = $( "#rancho  option:selected" ).text();
-      var loteText        = $( "#vinedo  option:selected" ).text();
-      var subloteText     = $( "#variedad  option:selected" ).text();
-      var fenologiaText   = $( "#FenologiaSelect  option:selected" ).text();
-      var fecha         = $( "#Fecha" ).val();
-      var observaciones = $( "#Observaciones" ).val();
-    if(predioId!=""&&loteId!=""&&subloteId!=""&&fenologiaId!=""&&fecha!=""&&observaciones!=""){
-        var db = dbInicializar();
-        db.transaction(function(tx) {
-            tx.executeSql("UPDATE fenologia SET  predioId = ?, predioNom = ?, loteId = ?, loteNom = ?, subloteId = ?, subloteNom = ?, fenologiaId = ?, fenologiaNom = ?, observaciones = ?,  fecha = ? WHERE id = ?",[predioId,predioText,loteId,loteText,subloteId,subloteText,varietalId,varietalText,fenologiaId,fenologiaText,observaciones,fecha,inputId]);
-        });
-        Materialize.toast('Fenología Actualizada.', 4000)
-         fenologiaShow(inputId);
+      else{
+         Materialize.toast('No puede dejar campos vacios de la configuracion.', 1500);
       }
-    else {
-       Materialize.toast('Ha dejado campos vacios', 4000);
     }
 
-}
-
-
-function  showFenologia(id){
-  var db = dbInicializar();
-  var html="";
-  db.transaction(function(t) {
-    t.executeSql("SELECT * FROM fenologia where id = ?", [id], function(transaction, results) {
-      for (var i = 0; i < results.rows.length; i++) {
-        var row = results.rows.item(i);
-        html += '<tr>'
-                     +'<td>'+row.predioNom+'</td>'
-                     +'<td>'+row.loteNom+'</td>'
-                     +'<td>'+row.subloteNom+'</td>'
-                     +'<td>'+row.fenologiaNom+'</td>'
-                     +'<td>'+row.fecha+'</td>'
-                     +'<td>'+row.observaciones+'</td>'
-                    +' </tr>';
-
-      }
-       var  tb = document.getElementById('bodyTableShow');
-              tb.innerHTML = html;
-    });
-  });
-}
-
-function rowMaduracion(){
-  var db = dbInicializar();
-  var html="";
-  db.transaction(function(t) {
-    t.executeSql("SELECT * FROM maduracion ORDER BY id DESC", [], function(transaction, results) {
-      for (var i = 0; i < results.rows.length; i++) {
-        var row = results.rows.item(i);
-        html += '<tr>'
-                     +'<td>'+row.fecha+'</td>'
-                     +'<td>'+row.variedadName+'</td>'
-                     +'<td>'+row.bloqueName+'</td>'
-                     +'<td>'+row.anadaName+'</td>'
-                     +'<td>'
-                          +'<ul class="collection">'
-                              +'<a href="#!" class="collection-item center-align" onclick="fenologiaShow('+row.id+');"><i class="fa fa-th-list"></i></a>'
-                          +'</ul>'
-                     +' </td>'
-                  +' </tr>';
-
-      }
-       var  tb = document.getElementById('bodyMaduracion');
-              tb.innerHTML = html;
-    });
-  });
-}
-
+/************* función para guardar un registro de maduración tomando la configuración del usuario  *************/
+   function getConfig(fecha,solidos,ph,at,brph,brat){
+      var db = dbInicializar();
+      var list="";
+      db.transaction(function(tx) {
+        tx.executeSql('CREATE TABLE IF NOT EXISTS config (id integer primary key, rancho text, vinedo text, variedad text, bloque text, anada text, ranchoName text, vinedoName text, variedadName text, bloqueName text, anadaName text)');
+      });
+    db.transaction(function(t) {
+      t.executeSql("SELECT * FROM config", [], function(transaction, results) {
+          if(results.rows.length){
+              for(var i = 0; i < results.rows.length; i++) {
+                  var row = results.rows.item(i);
+                  maduracionRegister(row.rancho, row.vinedo, row.variedad, row.bloque, row.anada,fecha,solidos,ph,at,brph,brat,0, row.ranchoName, row.vinedoName, row.variedadName, row.bloqueName, row.anadaName);
+              }
+              maduraIndex();
+              Materialize.toast('Maduración registrada.', 1500);
+          }
+          else{
+              Materialize.toast('Primero asigne una configuración ', 1500);
+          }
+      });
+      });
+  }
 
 function rowConfig(){
   var db = dbInicializar();
@@ -129,7 +66,6 @@ function rowConfig(){
             var row = results.rows.item(i);
           //alert(row.rancho+""+row.vinedo+""+row.variedad+""+row.bloque+""+row.anada)
             rowPredio();
-            rowAnada();
             setTimeout(function(){  $( "#rancho" ).val(row.rancho); $( "#anada" ).val(row.anada);  rowLote(); }, 520);
             setTimeout(function(){  $( "#vinedo" ).val(row.vinedo);  }, 600);
             setTimeout(function(){   rowSublote(); }, 700);
@@ -315,27 +251,13 @@ function maduracionRegister(rancho, vinedo, variedad, bloque, anada,fecha,solido
   });
   
 }
-
-
-
-
-function fenologiaUp(){
-      var predioId      = $( "#rancho" ).val();
-      var loteId        = $( "#vinedo" ).val();
-      var subloteId     = $( "#variedad" ).val();
-      var fenologiaId   = $( "#FenologiaSelect" ).val();
-      var predioText      = $( "#rancho  option:selected" ).text();
-      var loteText        = $( "#vinedo  option:selected" ).text();
-      var subloteText     = $( "#variedad  option:selected" ).text();
-      var fenologiaText   = $( "#FenologiaSelect  option:selected" ).text();
-      var fecha         = $( "#Fecha" ).val();
-      var observaciones = $( "#Observaciones" ).val();
-    if(predioId!=""&&loteId!=""&&subloteId!=""&&fenologiaId!=""&&fecha!=""&&observaciones!=""){
-        fenologiaRegister('0', '1', predioId, predioText, loteId, loteText, subloteId, subloteText, fecha, fenologiaId, fenologiaText, observaciones);
-        fenologiaIndex();
-        Materialize.toast('Fenología registrada.', 4000)
-      }
-    else {
-       Materialize.toast('Ha dejado campos vacios', 4000)
-    }
+function pesoRegister(rancho, vinedo, variedad, bloque, anada,ranchoName, vinedoName, variedadName, bloqueName, anadaName) {
+  var db = dbInicializar();
+  db.transaction(function(tx) {
+    tx.executeSql('CREATE TABLE IF NOT EXISTS maduracion (id integer primary key, ide text, rancho text, vinedo text, variedad text, bloque text, anada text,ranchoName text, vinedoName text, variedadName text, bloqueName text, anadaName text)');
+    tx.executeSql("INSERT INTO maduracion (rancho, vinedo, variedad, bloque, anada, fecha, solidos, ph, at, brph, brat, ide,ranchoName, vinedoName, variedadName, bloqueName, anadaName) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",[rancho, vinedo, variedad, bloque, anada,fecha,solidos,ph,at,brph,brat,ide,ranchoName, vinedoName, variedadName, bloqueName, anadaName], null, null);
+  });
+  
 }
+
+

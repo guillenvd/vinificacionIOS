@@ -5817,6 +5817,7 @@ small {
   cursor: pointer;
   vertical-align: middle; }
   .btn-floating i {
+    margin-top: 5px;
     width: inherit;
     display: inline-block;
     text-align: center;
