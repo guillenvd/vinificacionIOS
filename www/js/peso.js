@@ -154,4 +154,6 @@ tx.executeSql("INSERT INTO profile('name','label','list_order','category') value
         //error
     }
 );
+un registro por caja
+insert into cajas('calculo', 'peso')
  */

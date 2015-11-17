@@ -1,6 +1,7 @@
 	$(document).ready(function(){ 
 		$('#alta').hide(); 
 		$('#view').hide(); 
+		$('#alertInt').hide(); 
 		$('#editar').hide(); 
      	$('.datepicker').pickadate({
         	selectMonths: true, 
@@ -180,7 +181,7 @@ function rowMaduracion(){
 
       }
        var  tb = document.getElementById('bodyMaduracion');
-              tb.innerHTML = html;
+            tb.innerHTML = html;
     });
   });
 }

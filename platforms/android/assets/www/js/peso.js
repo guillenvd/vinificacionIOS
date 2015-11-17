@@ -122,10 +122,8 @@
 
     function savePeso() {
       if($('#checkInput').is(':checked')){
-        $('#result').append('seleccionado<br>');
       }
       else{
-        $('#result').append('no seleccionado<br>');
       }
         $('#result').append(result);
         var fecha = $('#fecha').val();
