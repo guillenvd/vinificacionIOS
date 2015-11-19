@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" /> 
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <meta name="format-detection" content="telephone=no">
+        <meta name="msapplication-tap-highlight" content="no">
+        <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
+        <link rel="stylesheet" type="text/css" href="css/index.css">
+        <link type="text/css" rel="stylesheet" href="css/materialize.css"  media="screen,projection"/>
+        <link type="text/css" rel="stylesheet" href="font/font-awesome/css/font-awesome.css"  media="screen,projection"/>
+        <title>Vinea</title>
+    </head>
+    <body>
+
+    <div class="navbar-fixed">
+        <nav>
+            <div class="nav-wrapper indigo darken-2">
+              <a class="brand-logo">VINEA - VINIFICACIÓN</a>
+                <a href="#" data-activates="mobile-demo" class="button-collapse">
+                    <i class="fa  fa-bars fa-lg"></i> 
+                </a>
+              <ul class="right hide-on-med-and-down">
+                <li><a id="fenologia-mnu" onclick="inicio();">Inicio</a></li>
+                <li><a id="fenologia-mnu" onclick="pesoIndex();">Cálculo de peso</a></li>
+                <li><a id="fenologia-mnu" onclick="maduraIndex();">Maduración</a></li>
+                <li><a id="fenologia-mnu" onclick="graficaIndex();">Grafica</a></li>
+                <li><a id="fenologia-mnu" onclick="hostView();">Host</a></li>
+                <li><a id="fenologia-mnu" onclick="salir();">Salir</a></li>
+              </ul>
+              <ul class="side-nav" id="mobile-demo">
+                <li><a id="fenologia-mnu" onclick="inicio();">Inicio</a></li>
+                <li><a id="fenologia-mnu" onclick="pesoIndex();">Cálculo de peso</a></li>
+                <li><a id="fenologia-mnu" onclick="maduraIndex();">Maduración</a></li>
+                <li><a id="fenologia-mnu" onclick="graficaIndex();">Grafica</a></li>
+                <li><a id="fenologia-mnu" onclick="hostView();">Host</a></li>
+                <li><a id="fenologia-mnu" onclick="salir();">Salir</a></li>
+              </ul>
+            </div>
+          </nav>
+  </div>
+    <div id="parentContainer">
+<center>             <div id="chart-container">FusionCharts will render here</div></center>      
+
+    <!-- Scripts -->
+            <!-- CORDOVA LIBRARY -->
+            <script type="text/javascript" src="cordova.js"></script>
+            <!-- JQUERY LIBRARY -->
+            <script type="text/javascript" src="js/jquery.js"></script>
+            <!-- materialize Scripts       -->
+            <script type="text/javascript" src="js/materialize.js"></script>
+            <script type="text/javascript" src="js/init.js"></script>
+            <!-- Scripts Configuracion base de datos-->
+            <script type="text/javascript" src="js/dbconfig.js"></script>
+            <script type="text/javascript" src="js/conexion.js"></script>
+            <script type="text/javascript" src="js/plugin/fusioncharts.js"></script>
+            <script type="text/javascript" src="js/plugin/fusioncharts.theme.fint.js"></script>
+            <script>
+                 setInterval(function(){ checkConnection(); }, 3000);
+            </script>
+    <!-- /Scripts -->
+    <script>
+$(document).ready(function () {
+onload();    
+FusionCharts.ready(function () {
+       var heightScreen = ( 75 * $(document).height() ) / 100;
+       var widthScreen =  ( 85 * $(document).width() ) / 100;
+       var visitChart = new FusionCharts({
+        type: 'msline',
+        renderAt: 'chart-container',
+        width: widthScreen ,
+        height: heightScreen,
+        dataFormat: 'json',
+        dataSource: {
+            "chart": {
+                "caption": "Solidos solubles, Ph y Acidez",
+                "subCaption": "Del bloque #",
+                "captionFontSize": "14",
+                "subcaptionFontSize": "14",
+                "subcaptionFontBold": "0",
+                "paletteColors": "#0075c2,#1aaf5d,#f4954b",
+                "bgcolor": "#ffffff",
+                "showBorder": "0",
+                "showShadow": "1",
+                "showCanvasBorder": "0",
+                "usePlotGradientColor": "0",
+                "legendBorderAlpha": "0",
+                "legendShadow": "0",
+                "showAxisLines": "0",
+                "showAlternateHGridColor": "0",
+                "divlineThickness": "1",
+                "divLineIsDashed": "1",
+                "divLineDashLen": "1",
+                "divLineGapLen": "1",
+                "xAxisName": "Fechas",
+                "showValues": "0"               
+            },
+            "categories": [
+                {
+                    "category": [
+                        { "label": "01/11/2015" }, 
+                        { "label": "02/11/2015" }, 
+                        { "label": "03/11/2015" },
+                        { "label": "04/11/2015" }, 
+                        { "label": "05/11/2015" }, 
+                        { "label": "06/11/2015" }, 
+                        { "label": "07/11/2015" }
+                    ]
+                }
+            ],
+            "dataset": [
+                {
+                    "seriesname": "solidos solubles",
+                    "data": [
+                        { "value": "15123" }, 
+                        { "value": "14233" }, 
+                        { "value": "25507" }, 
+                        { "value": "9110" }, 
+                        { "value": "15529" }, 
+                        { "value": "20803" }, 
+                        { "value": "19202" }
+                    ]
+                }, 
+                {
+                    "seriesname": "Ph",
+                    "data": [
+                        { "value": "13400" }, 
+                        { "value": "12800" }, 
+                        { "value": "22800" }, 
+                        { "value": "12400" }, 
+                        { "value": "15800" }, 
+                        { "value": "19800" }, 
+                        { "value": "21800" }
+                    ]
+                },
+                  {
+                    "seriesname": "Acidez",
+                    "data": [
+                        { "value": "12400" }, 
+                        { "value": "11800" }, 
+                        { "value": "21800" }, 
+                        { "value": "11400" }, 
+                        { "value": "14800" }, 
+                        { "value": "18800" }, 
+                        { "value": "20800" }
+                    ]
+                }
+            ]
+        }
+    }).render();
+});
+});
+    
+function onload() {
+            window.addEventListener("orientationchange", orientationChange, true);
+                function orientationChange() {
+
+                if (window.orientation == 0) {
+                    var heightScreen = ( 90 * $(document).height() ) / 100;
+                    var widthScreen =  (60 * $(document).width() ) / 100;
+                } else if (window.orientation == 90) {
+                    var heightScreen = ( 75 * $(window).height() ) / 100;
+                    var widthScreen =  ( 90 * $(window).width() ) / 100;
+                } else if (window.orientation == -90) {
+                    var heightScreen = ( 75 * $(window).height() ) / 100;
+                    var widthScreen =  ( 90 * $(window).width() ) / 100;
+                } else if (window.orientation == 180) {
+                    var heightScreen = ( 90 * $(document).height() ) / 100;
+                    var widthScreen =  ( 60 * $(document).width() ) / 100;
+                }
+
+    FusionCharts.ready(function () {  
+       var visitChart = new FusionCharts({
+        type: 'msline',
+        renderAt: 'chart-container',
+        width: widthScreen ,
+        height: heightScreen,
+        dataFormat: 'json',
+        dataSource: {
+            "chart": {
+                "caption": "Solidos solubles, Ph y Acidez",
+                "subCaption": "Del bloque #",
+                "captionFontSize": "14",
+                "subcaptionFontSize": "14",
+                "subcaptionFontBold": "0",
+                "paletteColors": "#0075c2,#1aaf5d,#f4954b",
+                "bgcolor": "#ffffff",
+                "showBorder": "0",
+                "showShadow": "1",
+                "showCanvasBorder": "0",
+                "usePlotGradientColor": "0",
+                "legendBorderAlpha": "0",
+                "legendShadow": "0",
+                "showAxisLines": "0",
+                "showAlternateHGridColor": "0",
+                "divlineThickness": "1",
+                "divLineIsDashed": "1",
+                "divLineDashLen": "1",
+                "divLineGapLen": "1",
+                "xAxisName": "Fechas",
+                "showValues": "0"               
+            },
+            "categories": [
+                {
+                    "category": [
+                        { "label": "01/11/2015" }, 
+                        { "label": "02/11/2015" }, 
+                        { "label": "03/11/2015" },
+                        { "label": "04/11/2015" }, 
+                        { "label": "05/11/2015" }, 
+                        { "label": "06/11/2015" }, 
+                        { "label": "07/11/2015" }
+                    ]
+                }
+            ],
+            "dataset": [
+                {
+                    "seriesname": "solidos solubles",
+                    "data": [
+                        { "value": "15123" }, 
+                        { "value": "14233" }, 
+                        { "value": "25507" }, 
+                        { "value": "9110" }, 
+                        { "value": "15529" }, 
+                        { "value": "20803" }, 
+                        { "value": "19202" }
+                    ]
+                }, 
+                {
+                    "seriesname": "Ph",
+                    "data": [
+                        { "value": "13400" }, 
+                        { "value": "12800" }, 
+                        { "value": "22800" }, 
+                        { "value": "12400" }, 
+                        { "value": "15800" }, 
+                        { "value": "19800" }, 
+                        { "value": "21800" }
+                    ]
+                },
+                  {
+                    "seriesname": "Acidez",
+                    "data": [
+                        { "value": "12400" }, 
+                        { "value": "11800" }, 
+                        { "value": "21800" }, 
+                        { "value": "11400" }, 
+                        { "value": "14800" }, 
+                        { "value": "18800" }, 
+                        { "value": "20800" }
+                    ]
+                }
+            ]
+        }
+    }).render();
+});
+                }
+        
+            }
+        
+    </script>
+
+    </div>
+    </body>
+</html>

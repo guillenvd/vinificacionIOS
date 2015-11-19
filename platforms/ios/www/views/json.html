@@ -1,0 +1,30 @@
+<div class="row z-depth-3">
+    <br><br>     
+       <div class="row">
+          <div class="div col s8 offset-s2">
+            <h5>Vinea.</h5>
+            <p>Sincronización de datos.</p>
+            <div class="divider"></div>
+            <div id="alert">   </div>
+            <div class="progress" id="loadDiv" style="margin">
+                <div id="load" class="indeterminate"></div>
+            </div>
+          </div>
+        </div>
+
+        <a class="btn-floating btn-large waves-effect waves-light  indigo darken-2" onclick="send()" id="SyncBtn">
+        	<i class="fa fa-refresh"></i>
+        </a>
+
+    <br><br><br>
+    <input type="hidden" name="hostHidden" id="hostHidden" value="">
+</div>
+            
+
+  <script>
+        $(document).ready(function() {
+          outputHost(); 
+          $('#loadDiv').hide();
+          $('#SyncBtn').show();
+        });
+  </script>

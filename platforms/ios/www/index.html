@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" /> 
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <meta name="format-detection" content="telephone=no">
+        <meta name="msapplication-tap-highlight" content="no">
+        <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
+        <link rel="stylesheet" type="text/css" href="css/index.css">
+        <link type="text/css" rel="stylesheet" href="css/materialize.css"  media="screen,projection"/>
+        <link type="text/css" rel="stylesheet" href="font/font-awesome/css/font-awesome.css"  media="screen,projection"/>
+        <title>Vinea</title>
+    </head>
+    <body>
+
+    <div class="navbar-fixed">
+        <nav>
+            <div class="nav-wrapper indigo darken-2">
+              <a class="brand-logo">VINEA - VINIFICACIÓN</a>
+                <a href="#" data-activates="mobile-demo" class="button-collapse">
+                    <i class="fa fa-bars fa-lg"></i> 
+                </a>
+              <ul class="right hide-on-med-and-down">
+                <li><a id="fenologia-mnu" onclick="inicio();">Inicio</a></li>
+                <li><a id="fenologia-mnu" onclick="maduraIndex();">Maduración</a></li>
+                <li><a id="fenologia-mnu" onclick="pesoIndex();">Cálculo de peso</a></li>
+                <li><a id="fenologia-mnu" href="grafica.html">Grafica</a></li>
+                <li><a id="fenologia-mnu" onclick="hostView();">Host</a></li>
+                <li><a id="fenologia-mnu" onclick="salir();">Salir</a></li>
+              </ul>
+              <ul class="side-nav" id="mobile-demo">
+                <li><a id="fenologia-mnu" onclick="inicio();">Inicio</a></li>
+                <li><a id="fenologia-mnu" onclick="maduraIndex();">Maduración</a></li>
+                <li><a id="fenologia-mnu" onclick="pesoIndex();">Cálculo de peso</a></li>
+                <li><a id="fenologia-mnu" href="grafica.html">Grafica</a></li>
+                <li><a id="fenologia-mnu" onclick="hostView();">Host</a></li>
+                <li><a id="fenologia-mnu" onclick="salir();">Salir</a></li>
+              </ul>
+            </div>
+          </nav>
+  </div>
+    <div class="container">
+        <div class="section center-align" id="conexionInfo">
+            <h5 class="center-align card-panel teal white-text hoverable flow-text" onclick="sincronizar();">
+                Tiene conexion a internet, de click en este mensaje para sincronizar
+            </h5>
+        </div>
+        <div class="section center-align" id="body">
+            <img class="responsive-img z-depth-3" src="img/vinea.jpg" >
+        </div>
+
+    <!-- Scripts -->
+            <!-- CORDOVA LIBRARY -->
+            <script type="text/javascript" src="cordova.js"></script>
+            <!-- JQUERY LIBRARY -->
+            <script type="text/javascript" src="js/jquery.js"></script>
+            <!-- materialize Scripts       -->
+            <script type="text/javascript" src="js/materialize.js"></script>
+            <script type="text/javascript" src="js/init.js"></script>
+            <!-- Scripts Configuracion base de datos-->
+            <script type="text/javascript" src="js/dbconfig.js"></script>
+            <script type="text/javascript" src="js/conexion.js"></script>
+            <script>
+                 setInterval(function(){ checkConnection(); }, 3000);
+            </script>
+    <!-- /Scripts -->
+
+    </div>
+    </body>
+</html>
