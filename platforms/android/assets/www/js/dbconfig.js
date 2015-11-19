@@ -34,9 +34,10 @@ function dropTable(table) {
     }
 
 /************* función para guardar un registro de maduración tomando la configuración del usuario  *************/
-   function getConfig(fecha,solidos,ph,at,brph,brat){
+   function getConfig(parameters, module){
       var db = dbInicializar();
       var list="";
+      var row = null;
       db.transaction(function(tx) {
         tx.executeSql('CREATE TABLE IF NOT EXISTS config (id integer primary key, rancho text, vinedo text, variedad text, bloque text, anada text, ranchoName text, vinedoName text, variedadName text, bloqueName text, anadaName text)');
       });
@@ -44,8 +45,10 @@ function dropTable(table) {
       t.executeSql("SELECT * FROM config", [], function(transaction, results) {
           if(results.rows.length){
               for(var i = 0; i < results.rows.length; i++) {
-                  var row = results.rows.item(i);
-                  maduracionRegister(row.rancho, row.vinedo, row.variedad, row.bloque, row.anada,fecha,solidos,ph,at,brph,brat,0, row.ranchoName, row.vinedoName, row.variedadName, row.bloqueName, row.anadaName);
+                  row = results.rows.item(i);
+                  if(module == 1){
+                    maduracionRegister(row.rancho, row.vinedo, row.variedad, row.bloque, row.anada,parameters.fecha,parameters.solidos,parameters.ph,parameters.at,parameters.brph,parameters.brat,0, row.ranchoName, row.vinedoName, row.variedadName, row.bloqueName, row.anadaName);                    
+                  }
               }
               maduraIndex();
               Materialize.toast('Maduración registrada.', 1500);

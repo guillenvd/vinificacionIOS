@@ -103,10 +103,10 @@
 
 	}
 	function editarMaduracion() {
-	        $('#editar').show();
-	        $('#index').hide();
-	        $('#alta').hide();
-	        $('#view').hide();
+	    $('#editar').show();
+	    $('#index').hide();
+	    $('#alta').hide();
+	    $('#view').hide();
 	    var db = dbInicializar();
 		db.transaction(function(t) {
 		    t.executeSql("SELECT * FROM maduracion where id = ?", [$('#viewId').val()], function(transaction, results) {
@@ -153,7 +153,8 @@
 	      var brph = $('#brph').val();
 	      var brat = $('#brat').val();
 	    if(fecha!='' && solidos!='' && ph!='' && at!='' && brph!='' && brat){
-	      getConfig(fecha,solidos,ph,at,brph,brat);/// se envian los campos para ser guardados
+	      var parameters = { fecha:fecha, solidos:solidos, ph:ph, at:at, brph:brph, brat:brat};
+	      getConfig(parameters,1);/// se envian los campos para ser guardados
 	    }
 	    else{
 	        Materialize.toast('No puede dejar campos vacios', 1500);

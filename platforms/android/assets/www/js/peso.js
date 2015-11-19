@@ -3,6 +3,7 @@
         $('#calculoPeso').hide();
         $('#calculoCajas').hide();
         $('#fieldCajas').hide();
+        $('#alertInt').hide();
         $('.datepicker').pickadate({
             selectMonths: true, 
             selectYears: 15
@@ -46,7 +47,7 @@
                        "<p><i class='fa fa-circle'></i></p>"+
                     "</div>"+
                     "<div class='input-field col s8'>"+
-                      "<input type='text' length='10' id='caja[]' name='caja[]' onkeyup='calpeso($(this).val());'>"+
+                      "<input type='text' length='10' id='caja[]' value='' name='caja[]' onkeyup='calpeso($(this).val());'>"+
                       "<label >PESO (KG)</label>"+
                     "</div>"+
                     "<div class='input-field col s2'>"+
@@ -65,7 +66,12 @@
       var string = "#divBox"+divEmpty;
       $(string).remove();
       var num = document.getElementsByName("caja[]"); // IR POR EL INPUT DE CAJAS EXISTENTES
-      $('#cajasMuestra').val(num.length-1);   //AL INPUT DE NUMERO DE CAJAS LE AUMENTAMOS UNO. 
+      if(num.length >0 ){
+        $('#cajasMuestra').val(-1);   //AL INPUT DE NUMERO DE CAJAS LE AUMENTAMOS UNO. 
+      }
+      else{
+              $('#cajasMuestra').val(0);   //AL INPUT DE NUMERO DE CAJAS LE AUMENTAMOS UNO. 
+      }
 
     }
 
@@ -121,11 +127,7 @@
     }
 
     function savePeso() {
-      if($('#checkInput').is(':checked')){
-      }
-      else{
-      }
-        $('#result').append(result);
+
         var fecha = $('#fecha').val();
         var costoUva = $('#costoUva').val();
         var pesoTotalNeto = $('#pesoTotalNeto').val();
@@ -136,14 +138,36 @@
         var pesoPromNeto = $('#pesoPromNeto').val();
         var pesoMuestra = $('#pesoMuestra').val();
         var result = 'fecha: '+fecha+'<br> costoUva: '+costoUva+'<br>pesoTotalNeto:'+pesoTotalNeto+'<br>totalCajas:'+totalCajas+'<br>cajasMuestra:'+cajasMuestra+'<br>taraCaja:'+taraCaja+'<br>pesoPromCaja:'+pesoPromCaja+'<br>pesoPromNeto:'+pesoPromNeto+'<br>pesoMuestra:'+pesoMuestra;
-        $('#result').append(result);
-        saveBoxs();
+      if($('#checkInput').is(':checked')){
+          if(checkBoxs() && fecha !='' && costoUva !='' && pesoTotalNeto !='' && totalCajas !='' && cajasMuestra !='' && taraCaja !='' && pesoPromCaja !='' && pesoPromNeto !='' && pesoMuestra !=''){
+
+          }
+          else{
+            Materialize.toast('No puede dejar campos vacios', 1500);
+          }
+      }
+      else{
+        if(fecha !='' && costoUva !='' && pesoTotalNeto){
+
+          }
+        else{
+            Materialize.toast('No puede dejar campos vacios', 1500);
+        }
+      }
+      $('#result').append(result);
+
     }
 
-    function saveBoxs() {
+    function checkBoxs() {
+      var response = 1;
         $('input[name^="caja"]').each(function(i) {
              $('#result').append('<br>caja'+i+''+$(this).val()+'<br>');
+             if( isNaN($(this).val()) || $(this).val() == '' ){
+                response = 0;
+             }
           });
+        alert(response);
+      return response;
     }
 /*
 tx.executeSql("INSERT INTO profile('name','label','list_order','category') values(?,?,?,?)", [x,x,x,x], 
