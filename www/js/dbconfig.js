@@ -263,4 +263,8 @@ function pesoRegister(rancho, vinedo, variedad, bloque, anada,ranchoName, vinedo
   
 }
 
+function cajasRegister(calculoId, peso, index, ide) {
+  
+}
+
 
