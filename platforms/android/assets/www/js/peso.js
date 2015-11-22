@@ -1,5 +1,6 @@
   $(document).ready(function(){ 
         $('#alta').hide();
+        $('#view').hide();
         $('#calculoPeso').hide();
         $('#calculoCajas').hide();
         $('#fieldCajas').hide();
@@ -127,7 +128,6 @@
     }
 
     function savePeso() {
-
         var fecha = $('#fecha').val();
         var costoUva = $('#costoUva').val();
         var pesoTotalNeto = $('#pesoTotalNeto').val();
@@ -137,10 +137,10 @@
         var pesoPromCaja = $('#pesoPromCaja').val();
         var pesoPromNeto = $('#pesoPromNeto').val();
         var pesoMuestra = $('#pesoMuestra').val();
-        var result = 'fecha: '+fecha+'<br> costoUva: '+costoUva+'<br>pesoTotalNeto:'+pesoTotalNeto+'<br>totalCajas:'+totalCajas+'<br>cajasMuestra:'+cajasMuestra+'<br>taraCaja:'+taraCaja+'<br>pesoPromCaja:'+pesoPromCaja+'<br>pesoPromNeto:'+pesoPromNeto+'<br>pesoMuestra:'+pesoMuestra;
-      if($('#checkInput').is(':checked')){
+        var parameters= { fecha:fecha, costoUva:costoUva, pesoTotalNeto:pesoTotalNeto, totalCajas:totalCajas, cajasMuestra:cajasMuestra, taraCaja:taraCaja, pesoPromCaja:pesoPromCaja, pesoPromNeto:pesoPromNeto, pesoMuestra:pesoMuestra};    
+    if($('#checkInput').is(':checked')){
           if(checkBoxs() && fecha !='' && costoUva !='' && pesoTotalNeto !='' && totalCajas !='' && cajasMuestra !='' && taraCaja !='' && pesoPromCaja !='' && pesoPromNeto !='' && pesoMuestra !=''){
-
+            getConfig(parameters, 2);
           }
           else{
             Materialize.toast('No puede dejar campos vacios', 1500);
@@ -148,16 +148,13 @@
       }
       else{
         if(fecha !='' && costoUva !='' && pesoTotalNeto){
-
+            getConfig(parameters, 2);
           }
         else{
             Materialize.toast('No puede dejar campos vacios', 1500);
         }
       }
-      $('#result').append(result);
-
     }
-
     function checkBoxs() {
       var response = 1;
         $('input[name^="caja"]').each(function(i) {
@@ -166,11 +163,78 @@
                 response = 0;
              }
           });
-        alert(response);
       return response;
     }
+
+function rowPeso(){
+  var db = dbInicializar();
+  var html="";
+  db.transaction(function(t) {
+    t.executeSql("SELECT * FROM peso ORDER BY id DESC", [], function(transaction, results) {
+      for (var i = 0; i < results.rows.length; i++) {
+        var row = results.rows.item(i);
+        html += '<tr>'
+                     +'<td>'+row.fecha+'</td>'
+                     +'<td>'+row.variedadName+'</td>'
+                     +'<td>'+row.bloqueName+'</td>'
+                     +'<td>'+row.anadaName+'</td>'
+                     +'<td>'
+                          +'<ul class="collection">'
+                              +'<a href="#!" class="collection-item center-align" onclick="viewPeso('+row.id+');"><i class="fa fa-th-list"></i></a>'
+                          +'</ul>'
+                     +' </td>'
+                  +' </tr>';
+
+       }
+       var  tb = document.getElementById('bodyPeso');
+            tb.innerHTML = html;
+    });
+  });
+}
+
+  function viewPeso(id) {
+      $('#alta').hide();
+      $('#index').hide();
+      $('#view').show();
+      var db = dbInicializar();
+    db.transaction(function(t) {
+        t.executeSql("SELECT * FROM peso where id = ?", [id], function(transaction, results) {
+          for (var i = 0; i < results.rows.length; i++) {
+              var row = results.rows.item(i);
+              if(row.ide=='0'){
+                $('#viewId').val(row.id);
+                $('#btns').show();
+              }
+              else{
+                  $('#viewId').val('');
+                  $('#btns').hide();
+              }
+            $('#viewrancho').empty(); 
+            $('#viewvinedo').empty();
+            $('#viewvariedad').empty();
+            $('#viewbloque').empty();
+            $('#viewanada').empty();
+            $('#viewfecha').empty();
+            $('#viewcostoUva').empty();
+            $('#viewpesoTotalNeto').empty();
+
+            $('#viewrancho').append(row.ranchoName); 
+            $('#viewvinedo').append(row.vinedoName);
+            $('#viewvariedad').append(row.variedadName);
+            $('#viewbloque').append(row.bloqueName);
+            $('#viewanada').append(row.anadaName);
+            $('#viewfecha').append(row.fecha);
+            $('#viewcostoUva').append(row.costoUva);
+            $('#viewpesoTotalNeto').append(row.pesoTotalNeto);
+          
+          }
+        });
+    });
+
+  }
+
 /*
-tx.executeSql("INSERT INTO profile('name','label','list_order','category') values(?,?,?,?)", [x,x,x,x], 
+tx.executeSql("INSERT INTO profile('','','','') values(?,?,?,?)", [x,x,x,x], 
     function(tx, results){
         var lastInsertId = results.insertId;
     }, 
@@ -178,6 +242,4 @@ tx.executeSql("INSERT INTO profile('name','label','list_order','category') value
         //error
     }
 );
-un registro por caja
-insert into cajas('calculo', 'peso')
  */

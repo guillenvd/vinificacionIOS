@@ -14,7 +14,6 @@ function dropTable(table) {
 
 /************* Guardar configuración del usuario ************************/
   function saveConfig() {
-   
       var rancho = $('#rancho option:selected').val();
       var vinedo = $('#vinedo option:selected').val();
       var variedad = $('#variedad option:selected').val();
@@ -34,6 +33,12 @@ function dropTable(table) {
     }
 
 /************* función para guardar un registro de maduración tomando la configuración del usuario  *************/
+  /**
+   * [getConfig Ir por la configuracion guardada por el usuario y despues guardarla segun lo requerido]
+   * @param  {[array]} parameters [array con los campos del formulario]
+   * @param  {[int]} module     [modulo del formulario, el que se guardará]
+   * @return {[]}            [none]
+   */
    function getConfig(parameters, module){
       var db = dbInicializar();
       var list="";
@@ -48,10 +53,13 @@ function dropTable(table) {
                   row = results.rows.item(i);
                   if(module == 1){
                     maduracionRegister(row.rancho, row.vinedo, row.variedad, row.bloque, row.anada,parameters.fecha,parameters.solidos,parameters.ph,parameters.at,parameters.brph,parameters.brat,0, row.ranchoName, row.vinedoName, row.variedadName, row.bloqueName, row.anadaName);                    
+                    Materialize.toast('Maduración registrada.', 1500);
+                    maduraIndex();
+                  }
+                  else if(module == 2){
+                    pesoRegister(row.rancho, row.vinedo, row.variedad, row.bloque, row.anada, row.ranchoName, row.vinedoName, row.variedadName, row.bloqueName, row.anadaName, parameters.fecha, parameters.costoUva, parameters.pesoTotalNeto, parameters.totalCajas, parameters.cajasMuestra, parameters.taraCaja, parameters.pesoPromCaja, parameters.pesoPromNeto, parameters.pesoMuestra, 0);
                   }
               }
-              maduraIndex();
-              Materialize.toast('Maduración registrada.', 1500);
           }
           else{
               Materialize.toast('Primero asigne una configuración ', 1500);
@@ -254,13 +262,45 @@ function maduracionRegister(rancho, vinedo, variedad, bloque, anada,fecha,solido
   });
   
 }
-function pesoRegister(rancho, vinedo, variedad, bloque, anada,ranchoName, vinedoName, variedadName, bloqueName, anadaName) {
+function pesoRegister(rancho, vinedo, variedad, bloque, anada, ranchoName, vinedoName, variedadName, bloqueName, anadaName, fecha, costoUva, pesoTotalNeto, totalCajas, cajasMuestra, taraCaja, pesoPromCaja, pesoPromNeto, pesoMuestra, ide) {
   var db = dbInicializar();
   db.transaction(function(tx) {
-    tx.executeSql('CREATE TABLE IF NOT EXISTS maduracion (id integer primary key, ide text, rancho text, vinedo text, variedad text, bloque text, anada text,ranchoName text, vinedoName text, variedadName text, bloqueName text, anadaName text)');
-    tx.executeSql("INSERT INTO maduracion (rancho, vinedo, variedad, bloque, anada, fecha, solidos, ph, at, brph, brat, ide,ranchoName, vinedoName, variedadName, bloqueName, anadaName) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",[rancho, vinedo, variedad, bloque, anada,fecha,solidos,ph,at,brph,brat,ide,ranchoName, vinedoName, variedadName, bloqueName, anadaName], null, null);
+    tx.executeSql('CREATE TABLE IF NOT EXISTS peso (id integer primary key, ide text, rancho text, vinedo text, variedad text, bloque text, anada text,ranchoName text, vinedoName text, variedadName text, bloqueName text, anadaName text, fecha text, costoUva text, pesoTotalNeto text, totalCajas text, cajasMuestra text, taraCaja text, pesoPromCaja text, pesoPromNeto text, pesoMuestra text)');
+    tx.executeSql("INSERT INTO peso (rancho, vinedo, variedad, bloque, anada,ranchoName, vinedoName, variedadName, bloqueName, anadaName, fecha, costoUva, pesoTotalNeto, totalCajas, cajasMuestra, taraCaja, pesoPromCaja, pesoPromNeto, pesoMuestra, ide) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",[rancho, vinedo, variedad, bloque, anada,ranchoName, vinedoName, variedadName, bloqueName, anadaName, fecha, costoUva, pesoTotalNeto, totalCajas, cajasMuestra, taraCaja, pesoPromCaja, pesoPromNeto, pesoMuestra, ide], 
+    function(tx, results){
+      alert(taraCaja);
+        if(taraCaja != '' ){
+          var lastInsertId = results.insertId;
+          $('input[name^="caja"]').each(function(i) {
+             cajasRegister(lastInsertId,$(this).val(),i+1,0);
+          });
+        }
+        else{
+          Materialize.toast('Calculo de peso registrado.', 1500);
+          pesoIndex();
+        }
+    }, 
+    function(tx, results){
+        alert('error');
+    });
   });
   
 }
+
+  function cajasRegister(calculoId, peso, index, ide) {
+    alert(calculoId+""+ peso+""+ index+""+ ide);
+    var db = dbInicializar();
+    db.transaction(function(tx) {
+      tx.executeSql('CREATE TABLE IF NOT EXISTS cajas (id integer primary key, ide text, calculoId text, peso text, numCaja text)');
+      tx.executeSql("INSERT INTO cajas (calculoId, peso, numCaja, ide) VALUES (?,?,?,?)", [calculoId, peso, index, ide],
+       function(tx, results){
+        alert(index);
+       },
+       function(tx, results){
+        alert('error');
+       });
+    });
+  }
+
 
 

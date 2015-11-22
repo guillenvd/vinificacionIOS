@@ -21,8 +21,8 @@
         </tbody>
     </table>
 </div>
-<div id="alta">
-<center>
+<div id="alta" class="center">
+
     <div class="row">
       <div class="col s12">
         <ul class="tabs">
@@ -162,6 +162,69 @@
         <p id='result'></p>
       </div>
     </div>
-  </center>
 </div>
+
+<div class="row center" id="view">
+    <div class="section center" >
+        <h1>Cálculo de peso</h1>
+        <h5>Visualizar registro</h5>
+        <div class="divider"></div>
+    </div>
+         <table  class="center bordered striped centered  highlight z-depth-3" id="tableFenologia">
+              <thead>
+                <tr>
+                    <th colspan= "2">Datos del cálculo</th>
+                </tr>
+              </thead>
+            <tbody>
+              <tr>
+                <th>Añada</th>
+                <td id='viewanada'></td>
+              </tr>
+              <tr>
+                <th>Rancho</th>
+                <td id='viewrancho'></td>
+              </tr>
+            <tr>
+                <th>Viñedo</th>
+                <td id='viewvinedo'></td>
+            </tr>
+            <tr>
+                <th>Variedad</th>
+                <td id='viewvariedad'></td>
+            </tr>
+            <tr>
+                <th>Bloque</th>
+                <td id='viewbloque'></td>
+            </tr>
+            <tr>
+                <th>fecha</th>
+                <td id='viewfecha'>s</td>
+            </tr>
+            <tr>
+                <th>Costo de la uva (Pesos)</th>
+                <td id='viewcostoUva'></td>
+            </tr>
+            <tr>
+                <th>Peso Total Neto (Kg)</th>
+                <td id='viewpesoTotalNeto'></td>
+            </tr>
+        </tbody>
+      </table>
+      <br> 
+    <div class="fixed-action-btn" style="bottom: 45px; right: 24px;" id='btns'>
+        <a class="btn-floating btn-large indigo darken-2">
+          <i class="fa fa-bars fa-lg"></i>
+        </a>
+        <ul>
+          <li><a class="btn-floating red"  onclick="deleteRow();"><i class="fa fa-trash-o"></i></a></li>
+          <li><a class="btn-floating yellow darken-1" onclick="editarPeso();"><i class="fa fa-pencil"></i></a></li>
+          <li><a class="btn-floating green" onclick="pesoIndex();"><i class="fa fa-arrow-left"></i></a></li>
+        </ul>
+      </div>
+
+      <input type="hidden" id='viewId' value="">
+</div>
+
+
 <script type="text/javascript" src="js/peso.js"></script>
