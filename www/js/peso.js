@@ -1,10 +1,12 @@
-  $(document).ready(function(){ 
+  $(document).ready(function(){
         $('#alta').hide();
         $('#view').hide();
         $('#calculoPeso').hide();
         $('#calculoCajas').hide();
         $('#fieldCajas').hide();
         $('#alertInt').hide();
+        $('#edit').hide();
+
         $('.datepicker').pickadate({
             selectMonths: true, 
             selectYears: 15
@@ -158,7 +160,6 @@
     function checkBoxs() {
       var response = 1;
         $('input[name^="caja"]').each(function(i) {
-             $('#result').append('<br>caja'+i+''+$(this).val()+'<br>');
              if( isNaN($(this).val()) || $(this).val() == '' ){
                 response = 0;
              }
@@ -195,6 +196,7 @@ function rowPeso(){
   function viewPeso(id) {
       $('#alta').hide();
       $('#index').hide();
+      $('#viewCalCajas').hide();
       $('#view').show();
       var db = dbInicializar();
     db.transaction(function(t) {
@@ -209,15 +211,7 @@ function rowPeso(){
                   $('#viewId').val('');
                   $('#btns').hide();
               }
-            $('#viewrancho').empty(); 
-            $('#viewvinedo').empty();
-            $('#viewvariedad').empty();
-            $('#viewbloque').empty();
-            $('#viewanada').empty();
-            $('#viewfecha').empty();
-            $('#viewcostoUva').empty();
-            $('#viewpesoTotalNeto').empty();
-
+            clearTable();
             $('#viewrancho').append(row.ranchoName); 
             $('#viewvinedo').append(row.vinedoName);
             $('#viewvariedad').append(row.variedadName);
@@ -226,20 +220,114 @@ function rowPeso(){
             $('#viewfecha').append(row.fecha);
             $('#viewcostoUva').append(row.costoUva);
             $('#viewpesoTotalNeto').append(row.pesoTotalNeto);
-          
+            if(row.taraCaja != ''){
+              $('#viewtotalCajas').append(row.totalCajas);
+              $('#viewcajasMuestra').append(row.cajasMuestra);
+              $('#viewtaraCaja').append(row.taraCaja);
+              $('#viewpesoPromCaja').append(row.pesoPromCaja);
+              $('#viewpesoPromNeto').append(row.pesoPromNeto);
+              $('#viewpesoMuestra').append(row.pesoMuestra);
+              showCajas(row.id);
+              $('#viewCalCajas').show();
+            }
           }
         });
     });
 
   }
+  function clearTable(){
+          $('#viewrancho').empty(); 
+          $('#viewvinedo').empty();
+          $('#viewvariedad').empty();
+          $('#viewbloque').empty();
+          $('#viewanada').empty();
+          $('#viewfecha').empty();
+          $('#viewcostoUva').empty();
+          $('#viewpesoTotalNeto').empty();
+          $('#viewtotalCajas').empty();
+          $('#viewcajasMuestra').empty();
+          $('#viewtaraCaja').empty();
+          $('#viewpesoPromCaja').empty();
+          $('#viewpesoPromNeto').empty();
+          $('#viewpesoMuestra').empty();
+          $('#bodyCaja').empty();
+  }
+  function showCajas(id){
+    var db = dbInicializar();
+    var html="";
+      db.transaction(function(t) {
+        t.executeSql("SELECT * FROM cajas where calculoId = ?", [id], function(transaction, results) {
+          for (var i = 0; i < results.rows.length; i++) {
+            var row = results.rows.item(i);
+            html += '<tr>'
+                         +'<td>'+row.numCaja+'</td>'
+                         +'<td>'+row.peso+'</td>'
+                    +' </tr>';
 
-/*
-tx.executeSql("INSERT INTO profile('','','','') values(?,?,?,?)", [x,x,x,x], 
-    function(tx, results){
-        var lastInsertId = results.insertId;
-    }, 
-    function(tx, results){
-        //error
-    }
-);
+           }
+           var  tb = document.getElementById('bodyCaja');
+                tb.innerHTML = html;
+        });
+      });
+  }
+
+
+  function deleteRow(){
+    var toastContent = '<span>¿Desea borrar este registro?<a class="waves-effect waves-teal btn-flat" style=\'color:#ffdd21;\' onclick="confirmDelete();">Si</a></span>';
+      Materialize.toast(toastContent, 1300);
+    
+  }
+  function confirmDelete() {
+    var db = dbInicializar();
+          db.transaction(function(t) {
+              t.executeSql("DELETE FROM peso where id = ?", [$('#viewId').val()], 
+                    function(tx, result) {   
+                            deleteBoxs();
+                    },
+                    function(error){                                
+                            Materialize.toast('Algo salio mal.', 1500);
+                            $('#viewId').val('');
+                    }
+              );
+          });
+  }
+
+  function deleteBoxs() {
+    var db = dbInicializar();
+          db.transaction(function(t) {
+              t.executeSql("DELETE FROM cajas where calculoId = ?", [$('#viewId').val()], 
+                    function(tx, result) {   
+                            Materialize.toast('Cálculo eliminado correctamente.', 1500);
+                            pesoIndex();
+                            $('#viewId').val('');
+                        },
+                        function(error){                                
+                            Materialize.toast('Algo salio mal.', 1500);
+                            $('#viewId').val('');
+                    }
+              );
+          });
+  }
+
+function editarPeso() {
+      $('#alta').hide();
+      $('#index').hide();
+      $('#viewCalCajas').hide();
+      $('#view').hide();
+      $('#edit').show();
+}
+  /*edit
+  tx.executeSql("INSERT INTO profile('','','','') values(?,?,?,?)", [x,x,x,x], 
+      function(tx, results){
+          var lastInsertId = results.insertId;
+      }, 
+      function(tx, results){
+          //error
+      }
+  );
+
+  <i class="fa fa-check"></i>
+
+  primero borrar las cajas y despues insertar llendo por ellas
+
  */

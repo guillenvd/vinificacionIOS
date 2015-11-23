@@ -21,6 +21,7 @@
         </tbody>
     </table>
 </div>
+
 <div id="alta" class="center">
 
     <div class="row">
@@ -158,8 +159,18 @@
          <p id='alertInt' class="textRojo">
           Verifique los valores, existen letras o simbolos donde no debería
           </p>
-          <br> <a class="waves-effect waves-light btn" onclick="savePeso();">Guardar</a>
-        <p id='result'></p>
+          <br> 
+      <div class="fixed-action-btn" style="bottom: 45px; right: 24px;" id='btns'>
+          <a class="btn-floating btn-large indigo darken-2">
+            <i class="fa fa-bars fa-lg"></i>
+          </a>
+          <ul>
+          <li><a class="btn-floating blue lighten-3" onclick="savePeso();"><i class="fa fa-floppy-o"></i></a></li>
+          <li><a class="btn-floating green" onclick="pesoIndex();"><i class="fa fa-arrow-left"></i></a></li>
+        </ul>
+      </div>
+
+
       </div>
     </div>
 </div>
@@ -170,7 +181,7 @@
         <h5>Visualizar registro</h5>
         <div class="divider"></div>
     </div>
-         <table  class="center bordered striped centered  highlight z-depth-3" id="tableFenologia">
+         <table  class="center bordered striped centered  highlight z-depth-1" id="tableFenologia">
               <thead>
                 <tr>
                     <th colspan= "2">Datos del cálculo</th>
@@ -198,8 +209,8 @@
                 <td id='viewbloque'></td>
             </tr>
             <tr>
-                <th>fecha</th>
-                <td id='viewfecha'>s</td>
+                <th>Fecha</th>
+                <td id='viewfecha'></td>
             </tr>
             <tr>
                 <th>Costo de la uva (Pesos)</th>
@@ -211,7 +222,54 @@
             </tr>
         </tbody>
       </table>
-      <br> 
+      <br><br>
+      <div id="viewCalCajas">
+          <table  class="center bordered striped centered  highlight z-depth-1" id="tableFenologia">
+                  <thead>
+                    <tr>
+                        <th colspan= "2">Cálculo Manual.</th>
+                    </tr>
+                  </thead>
+                <tbody>
+                  <tr>
+                    <th># Total cajas</th>
+                    <td id='viewtotalCajas'></td>
+                  </tr>
+                  <tr>
+                    <th># cajas de la muestra</th>
+                    <td id='viewcajasMuestra'></td>
+                  </tr>
+                <tr>
+                    <th>Tara de la caja</th>
+                    <td id='viewtaraCaja'></td>
+                </tr>
+                <tr>
+                    <th>Peso promedio por caja</th>
+                    <td id='viewpesoPromCaja'></td>
+                </tr>
+                <tr>
+                    <th>Peso promedio neto</th>
+                    <td id='viewpesoPromNeto'></td>
+                </tr>
+                <tr>
+                    <th>Peso total neto de la muestra</th>
+                    <td id='viewpesoMuestra'></td>
+                </tr>
+            </tbody>
+          </table>
+      <br><br>
+          <h3> Cajas </h3>
+          <table class="center bordered striped centered  highlight z-depth-1 responsive-table striped ">
+              <thead>
+                <tr>
+                    <th data-field="noCaja">No. Caja</th>
+                    <th data-field="peso">Peso</th>
+                </tr>
+              </thead>
+              <tbody id="bodyCaja">
+              </tbody>
+          </table>
+      </div>
     <div class="fixed-action-btn" style="bottom: 45px; right: 24px;" id='btns'>
         <a class="btn-floating btn-large indigo darken-2">
           <i class="fa fa-bars fa-lg"></i>
@@ -226,5 +284,98 @@
       <input type="hidden" id='viewId' value="">
 </div>
 
+
+<!-- sección de editar -->
+<div id="edit" class="center">
+
+    <div class="row">
+      <div  class="col s12">
+          <h4>Editar Registro</h4>
+          <div class="input-field col s12">
+                <label for="fecha">Fecha registro</label>
+                <input id="editfecha" type="text" class="datepicker">
+          </div>
+          <div class="input-field col s12">
+              <input type="text" id='editcostoUva'>
+              <label for="input_text">Costo de la uva (Pesos)</label>
+          </div>
+          <div class="input-field col s12">
+            <label for="input_text">Peso total Neto</label>
+          </div>
+          <div class="input-field col s12">
+              <input type="text"  id='editpesoTotalNeto' >
+          </div>
+          <div class="input-field col s12" id="editcalculoCajas" >
+              <input type="text" id='edittotalCajas' onkeyup='calpeso($(this).val());'>
+              <label for="input_text"># Total de cajas</label>
+          </div>
+
+          <br>
+          <fieldset id="editfieldCajas">
+            <legend>Cálculo de cajas</legend>
+
+            <div class="input-field col s12">
+                <label>Cajas de la muestra</label>
+            </div>
+            <div class="input-field col s12">
+              <input type="text" readonly="true" id="editcajasMuestra">
+            </div>
+
+            <div class="input-field col s12">
+              <input type="text" id='edittaraCaja'  onkeyup='calpeso($(this).val());'>
+              <label for="input_text">Tara cajas(Kg)</label>
+            </div>
+
+            <div class="input-field col s12">
+                <label>Peso promedio por caja(Kg)</label
+                >
+            </div>
+            <div class="input-field col s12">
+              <input type="text" disabled="true" id="editpesoPromCaja">
+            </div>
+
+            <div class="input-field col s12">
+                <label>Peso promedio neto(Kg)</label
+                >
+            </div>
+            <div class="input-field col s12">
+              <input type="text" disabled="true" id="editpesoPromNeto">
+            </div>
+
+            <div class="input-field col s12">
+                <label>Peso total neto de la muestra(Kg)</label
+                >
+            </div>
+            <div class="input-field col s12">
+              <input type="text" disabled="true" id="editpesoMuestra">
+            </div>
+            
+            <a class="waves-effect waves-light btn" onclick="newBox();">agregar caja</a>
+            <div id="cajas col s12">
+              <h3> Lista de cajas </h3>
+                <div id="editCajasAcumuladas">
+                  <div  id="editnewCajas">
+                  </div>
+                </div>
+            </div>
+          </fieldset>   
+         <p id='alertInt' class="textRojo">
+          Verifique los valores, existen letras o simbolos donde no debería
+          </p>
+          <br> 
+      <div class="fixed-action-btn" style="bottom: 45px; right: 24px;" id='btns'>
+          <a class="btn-floating btn-large indigo darken-2">
+            <i class="fa fa-bars fa-lg"></i>
+          </a>
+          <ul>
+          <li><a class="btn-floating blue lighten-3" onclick="savePeso();"><i class="fa fa-floppy-o"></i></a></li>
+          <li><a class="btn-floating green" onclick="pesoIndex();"><i class="fa fa-arrow-left"></i></a></li>
+        </ul>
+      </div>
+
+
+      </div>
+    </div>
+</div>
 
 <script type="text/javascript" src="js/peso.js"></script>

@@ -75,7 +75,6 @@ function rowConfig(){
     t.executeSql("SELECT * FROM config", [], function(transaction, results) {
       for (var i = 0; i < results.rows.length; i++) {
             var row = results.rows.item(i);
-          //alert(row.rancho+""+row.vinedo+""+row.variedad+""+row.bloque+""+row.anada)
             rowPredio();
             setTimeout(function(){  $( "#rancho" ).val(row.rancho); $( "#anada" ).val(row.anada);  rowLote(); }, 520);
             setTimeout(function(){  $( "#vinedo" ).val(row.vinedo);  }, 600);
@@ -268,17 +267,14 @@ function pesoRegister(rancho, vinedo, variedad, bloque, anada, ranchoName, vined
     tx.executeSql('CREATE TABLE IF NOT EXISTS peso (id integer primary key, ide text, rancho text, vinedo text, variedad text, bloque text, anada text,ranchoName text, vinedoName text, variedadName text, bloqueName text, anadaName text, fecha text, costoUva text, pesoTotalNeto text, totalCajas text, cajasMuestra text, taraCaja text, pesoPromCaja text, pesoPromNeto text, pesoMuestra text)');
     tx.executeSql("INSERT INTO peso (rancho, vinedo, variedad, bloque, anada,ranchoName, vinedoName, variedadName, bloqueName, anadaName, fecha, costoUva, pesoTotalNeto, totalCajas, cajasMuestra, taraCaja, pesoPromCaja, pesoPromNeto, pesoMuestra, ide) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",[rancho, vinedo, variedad, bloque, anada,ranchoName, vinedoName, variedadName, bloqueName, anadaName, fecha, costoUva, pesoTotalNeto, totalCajas, cajasMuestra, taraCaja, pesoPromCaja, pesoPromNeto, pesoMuestra, ide], 
     function(tx, results){
-      alert(taraCaja);
         if(taraCaja != '' ){
           var lastInsertId = results.insertId;
           $('input[name^="caja"]').each(function(i) {
              cajasRegister(lastInsertId,$(this).val(),i+1,0);
           });
         }
-        else{
-          Materialize.toast('Calculo de peso registrado.', 1500);
-          pesoIndex();
-        }
+      Materialize.toast('Calculo de peso registrado.', 1500);
+      pesoIndex();
     }, 
     function(tx, results){
         alert('error');
@@ -288,13 +284,11 @@ function pesoRegister(rancho, vinedo, variedad, bloque, anada, ranchoName, vined
 }
 
   function cajasRegister(calculoId, peso, index, ide) {
-    alert(calculoId+""+ peso+""+ index+""+ ide);
     var db = dbInicializar();
     db.transaction(function(tx) {
       tx.executeSql('CREATE TABLE IF NOT EXISTS cajas (id integer primary key, ide text, calculoId text, peso text, numCaja text)');
       tx.executeSql("INSERT INTO cajas (calculoId, peso, numCaja, ide) VALUES (?,?,?,?)", [calculoId, peso, index, ide],
        function(tx, results){
-        alert(index);
        },
        function(tx, results){
         alert('error');
