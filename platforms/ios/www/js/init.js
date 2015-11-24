@@ -19,6 +19,8 @@
     function pesoIndex(){
         $( "#body" ).load( "views/pesoIndex.html" );
         $('.button-collapse').sideNav('hide');
+        setTimeout(function(){ rowPeso(); }, 500);
+
     } 
   
     function hostView() {

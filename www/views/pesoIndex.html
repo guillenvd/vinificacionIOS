@@ -143,12 +143,12 @@
                          </p>
                       </div>
                       <div class="input-field col s8">
-                        <input type="text" id="caja[]" name="caja[]" value=""  onkeyup='calpeso($(this).val());'>
+                        <input type="text" id="caja[]" name="caja[]" value=""  onkeyup='calpeso("",$(this).val());'>
                         <label for="input_text">PESO (KG)</label>
 
                       </div>
                       <div class="input-field col s2">
-                        <a class="waves-effect waves-teal btn-flat" onclick="deleteBox(1);"><i class="fa fa-times"></i></a>
+                        <a class="waves-effect waves-teal btn-flat" onclick="deleteBox('',1);"><i class="fa fa-times"></i></a>
                       </div>
                     </div>
                   <div  id="newCajas">
@@ -290,6 +290,8 @@
 
     <div class="row">
       <div  class="col s12">
+      <p id="log">
+      </p>
           <h4>Editar Registro</h4>
           <div class="input-field col s12">
                 <label for="fecha">Fecha registro</label>
@@ -352,7 +354,7 @@
               <input type="text" disabled="true" id="editpesoMuestra">
             </div>
             
-            <a class="waves-effect waves-light btn" onclick="newBox();">agregar caja</a>
+            <a class="waves-effect waves-light btn" onclick="newEditBox();">agregar caja</a>
             
             <div id="cajas col s12">
               <h3> Lista de cajas </h3>
@@ -364,7 +366,7 @@
                 </div>
             </div>
           </fieldset>   
-         <p id='alertInt' class="textRojo">
+         <p id='editalertInt' class="textRojo">
           Verifique los valores, existen letras o simbolos donde no debería
           </p>
           <br> 

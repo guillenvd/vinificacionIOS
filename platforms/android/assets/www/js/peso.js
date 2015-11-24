@@ -54,7 +54,7 @@
                       "<label >PESO (KG)</label>"+
                     "</div>"+
                     "<div class='input-field col s2'>"+
-                      "<a class='waves-effect waves-teal btn-flat' onclick='deleteBox("+(num.length+1)+");'><i class='fa fa-times'></i></a>"+
+                      "<a class='waves-effect waves-teal btn-flat' onclick='deleteBox('',"+(num.length+1)+");'><i class='fa fa-times'></i></a>"+
                     "</div></div>";
         $('#newCajas').append(box); //AL DIV DE LA SECCION DE CAJAS LE CONCATENAMOS UN NUEVO INPUT 
         $('#cajasMuestra').val(num.length+1);   //AL INPUT DE NUMERO DE CAJAS LE AUMENTAMOS UNO. 
@@ -65,15 +65,15 @@
   ESTA FUNCION RECIVE COMO PARAMETRO EL INDICE DE EL INPUT QUE SE DECEA ELIMINAR 
   DESPUES SE RESTA 1 AL TOTAL DE CAJAS EXISTENTES PARA EL CALCULO DEL PESO
 */
-    function deleteBox(divEmpty) {
-      var string = "#divBox"+divEmpty;
+    function deleteBox(ref,divEmpty) {
+      var string = "#"+ref+"divBox"+divEmpty;
       $(string).remove();
-      var num = document.getElementsByName("caja[]"); // IR POR EL INPUT DE CAJAS EXISTENTES
+      var num = document.getElementsByName(""+ref+"caja[]"); // IR POR EL INPUT DE CAJAS EXISTENTES
       if(num.length >0 ){
-        $('#cajasMuestra').val(-1);   //AL INPUT DE NUMERO DE CAJAS LE AUMENTAMOS UNO. 
+        $('#'+ref+'cajasMuestra').val(-1);   //AL INPUT DE NUMERO DE CAJAS LE AUMENTAMOS UNO. 
       }
       else{
-              $('#cajasMuestra').val(0);   //AL INPUT DE NUMERO DE CAJAS LE AUMENTAMOS UNO. 
+              $('#'+ref+'cajasMuestra').val(0);   //AL INPUT DE NUMERO DE CAJAS LE AUMENTAMOS UNO. 
       }
 
     }
@@ -313,6 +313,7 @@ function rowPeso(){
       $('#alta').hide();
       $('#index').hide();
       $('#viewCalCajas').hide();
+      $('#editalertInt').hide();
       $('#view').hide();
       $('#edit').show();
     var db = dbInicializar();
@@ -357,11 +358,11 @@ function rowPeso(){
                        "<p><i class='fa fa-circle'></i></p>"+
                     "</div>"+
                     "<div class='input-field col s8'>"+
-                      "<input type='text' length='10' id='caja[]' value='"+row.peso+"' name='caja[]' onkeyup='calpeso($(this).val());'>"+
+                      "<input type='text' length='10' id='editCaja[]' value='"+row.peso+"' name='editCaja[]' onkeyup='calpeso($(this).val());'>"+
                       "<label >PESO (KG)</label>"+
                     "</div>"+
                     "<div class='input-field col s2'>"+
-                      "<a class='waves-effect waves-teal btn-flat' onclick='deleteBox("+(i)+");'><i class='fa fa-times'></i></a>"+
+                      "<a class='waves-effect waves-teal btn-flat' onclick='deleteBox('edit',"+(i)+");'><i class='fa fa-times'></i></a>"+
                     "</div></div>";
 
            }
@@ -371,7 +372,27 @@ function rowPeso(){
       });
   }
 
-
+            
+            
+            
+    function newEditBox() {
+        var num = document.getElementsByName("editCaja[]"); // IR POR EL INPUT DE CAJAS EXISTENTES
+        alert(num.length);
+        //AL NUMERO DE CAJAS LE SUMAMOS UNO PARA EL INCREMENTO
+        var box =  "<div class='input-field col s12' id='divBox"+(num.length+1)+"'><div class='input-field col s2'>"+
+                       "<p><i class='fa fa-circle'></i></p>"+
+                    "</div>"+
+                    "<div class='input-field col s8'>"+
+                      "<input type='text' length='10' id='editCaja[]' value='' name='editCaja[]' onkeyup='calpeso($(this).val());'>"+
+                      "<label >PESO (KG)</label>"+
+                    "</div>"+
+                    "<div class='input-field col s2'>"+
+                      "<a class='waves-effect waves-teal btn-flat' onclick='deleteBox('edit',"+(num.length+1)+");'><i class='fa fa-times'></i></a>"+
+                    "</div></div>";
+        $('#editnewCajas').append(box); //AL DIV DE LA SECCION DE CAJAS LE CONCATENAMOS UN NUEVO INPUT 
+        $('#editcajasMuestra').val(num.length+1);   //AL INPUT DE NUMERO DE CAJAS LE AUMENTAMOS UNO. 
+        $('#editcajasMuestra').val(num.length);  
+    }
 
 /*
   <i class="fa fa-check"></i>
