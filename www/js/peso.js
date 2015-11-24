@@ -309,25 +309,73 @@ function rowPeso(){
           });
   }
 
-function editarPeso() {
+  function editarPeso() {
       $('#alta').hide();
       $('#index').hide();
       $('#viewCalCajas').hide();
       $('#view').hide();
       $('#edit').show();
-}
-  /*edit
-  tx.executeSql("INSERT INTO profile('','','','') values(?,?,?,?)", [x,x,x,x], 
-      function(tx, results){
-          var lastInsertId = results.insertId;
-      }, 
-      function(tx, results){
-          //error
-      }
-  );
+    var db = dbInicializar();
+    db.transaction(function(t) {
+        t.executeSql("SELECT * FROM peso where id = ?", [$('#viewId').val()], function(transaction, results) {
+          for (var i = 0; i < results.rows.length; i++) {
+              var row = results.rows.item(i);
+            $('#editfecha').val('');
+            $('#editcostoUva').val('');
+            $('#editpesoTotalNeto').val('');
+            $('#edittotalCajas').val('');
+            $('#editcajasMuestra').val('');
+            $('#edittaraCaja').val('');
+            $('#editpesoPromCaja').val('');
+            $('#editpesoPromNeto').val('');
+            $('#editpesoMuestra').val('');
 
+            
+            $('#editfecha').val(row.fecha);
+            $('#editcostoUva').val(row.costoUva);
+            $('#editpesoTotalNeto').val(row.pesoTotalNeto);
+            $('#edittotalCajas').val(row.totalCajas);
+            $('#editcajasMuestra').val(row.cajasMuestra);
+            $('#edittaraCaja').val(row.taraCaja);
+            $('#editpesoPromCaja').val(row.pesoPromCaja);
+            $('#editpesoPromNeto').val(row.pesoPromNeto);
+            $('#editpesoMuestra').val(row.pesoMuestra);
+            getBoxstoEdit();
+          }
+        });
+    });
+  }
+
+  function getBoxstoEdit() {
+    var db = dbInicializar();
+    var box="";
+      db.transaction(function(t) {
+        t.executeSql("SELECT * FROM cajas where calculoId = ?", [$('#viewId').val()], function(transaction, results) {
+          for (var i = 0; i < results.rows.length; i++) {
+            var row = results.rows.item(i);
+            box += "<div class='input-field col s12' id='divBox"+(i)+"'><div class='input-field col s2'>"+
+                       "<p><i class='fa fa-circle'></i></p>"+
+                    "</div>"+
+                    "<div class='input-field col s8'>"+
+                      "<input type='text' length='10' id='caja[]' value='"+row.peso+"' name='caja[]' onkeyup='calpeso($(this).val());'>"+
+                      "<label >PESO (KG)</label>"+
+                    "</div>"+
+                    "<div class='input-field col s2'>"+
+                      "<a class='waves-effect waves-teal btn-flat' onclick='deleteBox("+(i)+");'><i class='fa fa-times'></i></a>"+
+                    "</div></div>";
+
+           }
+
+           $('#editExistCajas').append(box);
+        });
+      });
+  }
+
+
+
+/*
   <i class="fa fa-check"></i>
-
-  primero borrar las cajas y despues insertar llendo por ellas
-
- */
+  primero borrar las cajas
+  y despues insertar llendo
+  por ellas
+*/

@@ -305,12 +305,14 @@
           <div class="input-field col s12">
               <input type="text"  id='editpesoTotalNeto' >
           </div>
+          <!--div para cajas-->
           <div class="input-field col s12" id="editcalculoCajas" >
-              <input type="text" id='edittotalCajas' onkeyup='calpeso($(this).val());'>
+              <input type="text" id='edittotalCajas' onkeyup='calpeso($(this).val());'/>
               <label for="input_text"># Total de cajas</label>
           </div>
 
           <br>
+          <!-- field para cajas list-->
           <fieldset id="editfieldCajas">
             <legend>Cálculo de cajas</legend>
 
@@ -351,10 +353,13 @@
             </div>
             
             <a class="waves-effect waves-light btn" onclick="newBox();">agregar caja</a>
+            
             <div id="cajas col s12">
               <h3> Lista de cajas </h3>
                 <div id="editCajasAcumuladas">
-                  <div  id="editnewCajas">
+                  <div  id="editExistCajas">
+                  </div>
+                  <div  id="newCajas">
                   </div>
                 </div>
             </div>
