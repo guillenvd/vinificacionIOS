@@ -143,12 +143,12 @@
                          </p>
                       </div>
                       <div class="input-field col s8">
-                        <input type="text" id="caja[]" name="caja[]" value=""  onkeyup='calpeso("",$(this).val());'>
+                        <input type="text" id="caja[]" name="caja[]" value=""  onkeyup='calpeso($(this).val());'>
                         <label for="input_text">PESO (KG)</label>
 
                       </div>
                       <div class="input-field col s2">
-                        <a class="waves-effect waves-teal btn-flat" onclick="deleteBox('',1);"><i class="fa fa-times"></i></a>
+                        <a class="waves-effect waves-teal btn-flat" onclick="deleteBox(1);"><i class="fa fa-times"></i></a>
                       </div>
                     </div>
                   <div  id="newCajas">
@@ -160,17 +160,7 @@
           Verifique los valores, existen letras o simbolos donde no debería
           </p>
           <br> 
-      <div class="fixed-action-btn" style="bottom: 45px; right: 24px;" id='btns'>
-          <a class="btn-floating btn-large indigo darken-2">
-            <i class="fa fa-bars fa-lg"></i>
-          </a>
-          <ul>
-          <li><a class="btn-floating blue lighten-3" onclick="savePeso();"><i class="fa fa-floppy-o"></i></a></li>
-          <li><a class="btn-floating green" onclick="pesoIndex();"><i class="fa fa-arrow-left"></i></a></li>
-        </ul>
-      </div>
-
-
+          <a class="waves-effect waves-light btn indigo darken-2" onclick="savePeso();">Guardar</a>
       </div>
     </div>
 </div>
@@ -277,7 +267,6 @@
         <ul>
           <li><a class="btn-floating red"  onclick="deleteRow();"><i class="fa fa-trash-o"></i></a></li>
           <li><a class="btn-floating yellow darken-1" onclick="editarPeso();"><i class="fa fa-pencil"></i></a></li>
-          <li><a class="btn-floating green" onclick="pesoIndex();"><i class="fa fa-arrow-left"></i></a></li>
         </ul>
       </div>
 
@@ -290,19 +279,17 @@
 
     <div class="row">
       <div  class="col s12">
-      <p id="log">
-      </p>
           <h4>Editar Registro</h4>
           <div class="input-field col s12">
-                <label for="fecha">Fecha registro</label>
+                <label class="active" for="fecha">Fecha registro</label>
                 <input id="editfecha" type="text" class="datepicker">
           </div>
           <div class="input-field col s12">
               <input type="text" id='editcostoUva'>
-              <label for="input_text">Costo de la uva (Pesos)</label>
+              <label class="active" for="input_text">Costo de la uva (Pesos)</label>
           </div>
           <div class="input-field col s12">
-            <label for="input_text">Peso total Neto</label>
+            <label class="active" for="input_text">Peso total Neto</label>
           </div>
           <div class="input-field col s12">
               <input type="text"  id='editpesoTotalNeto' >
@@ -310,7 +297,7 @@
           <!--div para cajas-->
           <div class="input-field col s12" id="editcalculoCajas" >
               <input type="text" id='edittotalCajas' onkeyup='calpeso($(this).val());'/>
-              <label for="input_text"># Total de cajas</label>
+              <label class="active" for="input_text"># Total de cajas</label>
           </div>
 
           <br>
@@ -319,7 +306,7 @@
             <legend>Cálculo de cajas</legend>
 
             <div class="input-field col s12">
-                <label>Cajas de la muestra</label>
+                <label class="active">Cajas de la muestra</label>
             </div>
             <div class="input-field col s12">
               <input type="text" readonly="true" id="editcajasMuestra">
@@ -327,11 +314,11 @@
 
             <div class="input-field col s12">
               <input type="text" id='edittaraCaja'  onkeyup='calpeso($(this).val());'>
-              <label for="input_text">Tara cajas(Kg)</label>
+              <label class="active" for="input_text">Tara cajas(Kg)</label>
             </div>
 
             <div class="input-field col s12">
-                <label>Peso promedio por caja(Kg)</label
+                <label class="active">Peso promedio por caja(Kg)</label
                 >
             </div>
             <div class="input-field col s12">
@@ -339,7 +326,7 @@
             </div>
 
             <div class="input-field col s12">
-                <label>Peso promedio neto(Kg)</label
+                <label class="active">Peso promedio neto(Kg)</label
                 >
             </div>
             <div class="input-field col s12">
@@ -347,14 +334,14 @@
             </div>
 
             <div class="input-field col s12">
-                <label>Peso total neto de la muestra(Kg)</label
+                <label class="active">Peso total neto de la muestra(Kg)</label
                 >
             </div>
             <div class="input-field col s12">
               <input type="text" disabled="true" id="editpesoMuestra">
             </div>
             
-            <a class="waves-effect waves-light btn" onclick="newEditBox();">agregar caja</a>
+            <a class="waves-effect waves-light btn" onclick="newBox();">agregar caja</a>
             
             <div id="cajas col s12">
               <h3> Lista de cajas </h3>
@@ -370,16 +357,7 @@
           Verifique los valores, existen letras o simbolos donde no debería
           </p>
           <br> 
-      <div class="fixed-action-btn" style="bottom: 45px; right: 24px;" id='btns'>
-          <a class="btn-floating btn-large indigo darken-2">
-            <i class="fa fa-bars fa-lg"></i>
-          </a>
-          <ul>
-          <li><a class="btn-floating blue lighten-3" onclick="savePeso();"><i class="fa fa-floppy-o"></i></a></li>
-          <li><a class="btn-floating green" onclick="pesoIndex();"><i class="fa fa-arrow-left"></i></a></li>
-        </ul>
-      </div>
-
+       <a class="waves-effect waves-light btn" onclick="saveConfig();">Actualizar</a>
 
       </div>
     </div>

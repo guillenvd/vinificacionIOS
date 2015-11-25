@@ -33,11 +33,17 @@
   });
 
 /*   FUNCION PARA SOLO MOSTRAR LA SECCIÓN DE ALTA DE CALCULO DE PESO   */
+    function initBack(){
+        $('#backMenu').show();
+        $('#backMenu').removeAttr('onclick');
+        $('#backMenu').attr('onclick','pesoIndex();');
+    }
     function altaPeso(){
           $('#index').hide();
           $('#alta').show();
           $('ul.tabs').tabs();
-           rowPredio();
+          initBack();
+          rowPredio();
           rowAnada();
           rowConfig(); 
     } 
@@ -50,14 +56,13 @@
                        "<p><i class='fa fa-circle'></i></p>"+
                     "</div>"+
                     "<div class='input-field col s8'>"+
-                      "<input type='text' length='10' id='caja[]' value='' name='caja[]' onkeyup='calpeso($(this).val());'>"+
+                      "<input type='text' length='10' id='caja[]' value='' name='caja[]' onkeyup='calpeso(\"\",$(this).val());'>"+
                       "<label >PESO (KG)</label>"+
                     "</div>"+
                     "<div class='input-field col s2'>"+
-                      "<a class='waves-effect waves-teal btn-flat' onclick='deleteBox('',"+(num.length+1)+");'><i class='fa fa-times'></i></a>"+
+                      "<a class='waves-effect waves-teal btn-flat' onclick='deleteBox(\"\","+(num.length+1)+");'><i class='fa fa-times'></i></a>"+
                     "</div></div>";
         $('#newCajas').append(box); //AL DIV DE LA SECCION DE CAJAS LE CONCATENAMOS UN NUEVO INPUT 
-        $('#cajasMuestra').val(num.length+1);   //AL INPUT DE NUMERO DE CAJAS LE AUMENTAMOS UNO. 
         $('#cajasMuestra').val(num.length);  
     }
 
@@ -67,44 +72,48 @@
 */
     function deleteBox(ref,divEmpty) {
       var string = "#"+ref+"divBox"+divEmpty;
-      $(string).remove();
       var num = document.getElementsByName(""+ref+"caja[]"); // IR POR EL INPUT DE CAJAS EXISTENTES
       if(num.length >0 ){
-        $('#'+ref+'cajasMuestra').val(-1);   //AL INPUT DE NUMERO DE CAJAS LE AUMENTAMOS UNO. 
+        $('#'+ref+'cajasMuestra').val(num.length-1);   //AL INPUT DE NUMERO DE CAJAS LE AUMENTAMOS UNO. 
       }
       else{
               $('#'+ref+'cajasMuestra').val(0);   //AL INPUT DE NUMERO DE CAJAS LE AUMENTAMOS UNO. 
       }
+      $(string).remove();
+      calpeso(ref,1);
 
     }
 
-    function calpeso(kg) {
-      if(kg !='' && !isNaN(kg) && sumCajaKg() != 0){
-        var numCajas = document.getElementsByName("caja[]").length; 
-        var sumCajasKg = sumCajaKg();
-        pesoPromCaja(numCajas,sumCajasKg);
+    function calpeso(ref,kg) {
+      if(kg !='' && !isNaN(kg) && sumCajaKg(ref) != 0){
+        var numCajas = document.getElementsByName(ref+"caja[]").length; 
+        alert(numCajas);
+        var sumCajasKg = sumCajaKg(ref);
+        pesoPromCaja(ref,numCajas,sumCajasKg);
       }
     }
 
-    function sumCajaKg(argument) {
+    function sumCajaKg(ref) {
         var suma = 0;
-        $('input[name^="caja"]').each(function() {
+        var stringPattern = ref+"caja";
+        $('input[name^="'+stringPattern+'"]').each(function() {
             if($(this).val()!=''&& !isNaN($(this).val())){
               suma += parseFloat($(this).val());
             }
         });
       return suma;
     }
+
     /**
      * [pesoPromCaja description]
      * @param  {[float]} numCajas   [Numero de Cajas de la muestra]
      * @param  {[float]} sumCajasKg [Suma del peso de las cajas de la muestra]
      * @return {[none]}            [n/a]
      */
-    function pesoPromCaja(numCajas,sumCajasKg) {
+    function pesoPromCaja(ref,numCajas,sumCajasKg) {
         var pesoProm = parseFloat(sumCajasKg) / parseFloat(numCajas);
-        $('#pesoPromCaja').val(pesoProm);
-        pesoTotalNetoMuestra(numCajas,pesoProm);
+        $('#'+ref+'pesoPromCaja').val(pesoProm.toFixed(2));
+        pesoTotalNetoMuestra(ref,numCajas,pesoProm);
     }
     /**
      * [pesoTotalNetoMuestra description]
@@ -112,20 +121,20 @@
      * @param  {[float]} arg2 [Peso promedio por caja(Kg)]
      * @return {[none]}      [n/a]
      */
-    function pesoTotalNetoMuestra(arg1,arg2) {
-        var calculo = (parseFloat(arg1)*parseFloat(arg2)) - (parseFloat(arg1) *$('#taraCaja').val());
-        $('#pesoMuestra').val(calculo);
-        pesoPromNeto(calculo,arg1);
+    function pesoTotalNetoMuestra(ref,arg1,arg2) {
+        var calculo = (parseFloat(arg1)*parseFloat(arg2)) - (parseFloat(arg1) *$('#'+ref+'taraCaja').val());
+        $('#'+ref+'pesoMuestra').val(calculo.toFixed(2));
+        pesoPromNeto(ref,calculo,arg1);
     }
-    function pesoPromNeto(arg1,arg2){
+    function pesoPromNeto(ref,arg1,arg2){
         var NuevoCalculo =  parseFloat(arg1) / parseFloat(arg2);
-        $('#pesoPromNeto').val(NuevoCalculo);
-        pesoTotalNeto(NuevoCalculo);
+        $('#'+ref+'pesoPromNeto').val(NuevoCalculo.toFixed(2));
+        pesoTotalNeto(ref,NuevoCalculo);
     }
-    function pesoTotalNeto(arg1) {
-      if( ($('#taraCaja').val() !='' && !isNaN( $('#taraCaja').val())) && $('#totalCajas').val() !='' && !isNaN( $('#totalCajas').val())){
-        var NuevoCalculo = parseFloat($('#totalCajas').val()) * parseFloat(arg1);
-        $('#pesoTotalNeto').val(NuevoCalculo);
+    function pesoTotalNeto(ref,arg1) {
+      if( ($('#'+ref+'taraCaja').val() !='' && !isNaN( $('#'+ref+'taraCaja').val())) && $('#'+ref+'totalCajas').val() !='' && !isNaN( $('#'+ref+'totalCajas').val())){
+        var NuevoCalculo = parseFloat($('#'+ref+'totalCajas').val()) * parseFloat(arg1);
+        $('#'+ref+'pesoTotalNeto').val(NuevoCalculo.toFixed(2));
       }
     }
 
@@ -198,8 +207,9 @@ function rowPeso(){
       $('#index').hide();
       $('#viewCalCajas').hide();
       $('#view').show();
+      initBack();
       var db = dbInicializar();
-    db.transaction(function(t) {
+        db.transaction(function(t) {
         t.executeSql("SELECT * FROM peso where id = ?", [id], function(transaction, results) {
           for (var i = 0; i < results.rows.length; i++) {
               var row = results.rows.item(i);
@@ -316,6 +326,11 @@ function rowPeso(){
       $('#editalertInt').hide();
       $('#view').hide();
       $('#edit').show();
+      $('#editfieldCajas').hide();
+      $('#editcalculoCajas').hide();
+      $('#editalertInt').hide();
+      initBack();
+
     var db = dbInicializar();
     db.transaction(function(t) {
         t.executeSql("SELECT * FROM peso where id = ?", [$('#viewId').val()], function(transaction, results) {
@@ -335,13 +350,19 @@ function rowPeso(){
             $('#editfecha').val(row.fecha);
             $('#editcostoUva').val(row.costoUva);
             $('#editpesoTotalNeto').val(row.pesoTotalNeto);
-            $('#edittotalCajas').val(row.totalCajas);
-            $('#editcajasMuestra').val(row.cajasMuestra);
-            $('#edittaraCaja').val(row.taraCaja);
-            $('#editpesoPromCaja').val(row.pesoPromCaja);
-            $('#editpesoPromNeto').val(row.pesoPromNeto);
-            $('#editpesoMuestra').val(row.pesoMuestra);
-            getBoxstoEdit();
+            if( row.taraCaja != ''){
+              $('#edittotalCajas').prop( "disabled", true );
+              $('#editfieldCajas').show();
+              $('#editcalculoCajas').show();
+              $('#edittotalCajas').val(row.totalCajas);
+              $('#editcajasMuestra').val(row.cajasMuestra);
+              $('#edittaraCaja').val(row.taraCaja);
+              $('#editpesoPromCaja').val(row.pesoPromCaja);
+              $('#editpesoPromNeto').val(row.pesoPromNeto);
+              $('#editpesoMuestra').val(row.pesoMuestra);
+              getBoxstoEdit();
+            }
+            
           }
         });
     });
@@ -354,19 +375,18 @@ function rowPeso(){
         t.executeSql("SELECT * FROM cajas where calculoId = ?", [$('#viewId').val()], function(transaction, results) {
           for (var i = 0; i < results.rows.length; i++) {
             var row = results.rows.item(i);
-            box += "<div class='input-field col s12' id='divBox"+(i)+"'><div class='input-field col s2'>"+
+            box += "<div class='input-field col s12' id='editdivBox"+(i)+"'><div class='input-field col s2'>"+
                        "<p><i class='fa fa-circle'></i></p>"+
                     "</div>"+
                     "<div class='input-field col s8'>"+
-                      "<input type='text' length='10' id='editCaja[]' value='"+row.peso+"' name='editCaja[]' onkeyup='calpeso($(this).val());'>"+
-                      "<label >PESO (KG)</label>"+
+                      "<input type='text' length='10' id='editcaja[]' value='"+row.peso+"' name='editcaja[]' onkeyup='calpeso(\"edit\", $(this).val());'>"+
+                      "<label class='active' >PESO (KG)</label>"+
                     "</div>"+
                     "<div class='input-field col s2'>"+
-                      "<a class='waves-effect waves-teal btn-flat' onclick='deleteBox('edit',"+(i)+");'><i class='fa fa-times'></i></a>"+
+                      "<a class='waves-effect waves-teal btn-flat' onclick='deleteBox(\"edit\","+(i)+");'><i class='fa fa-times'></i></a>"+
                     "</div></div>";
 
            }
-
            $('#editExistCajas').append(box);
         });
       });
@@ -376,21 +396,19 @@ function rowPeso(){
             
             
     function newEditBox() {
-        var num = document.getElementsByName("editCaja[]"); // IR POR EL INPUT DE CAJAS EXISTENTES
-        alert(num.length);
+        var num = document.getElementsByName("editcaja[]"); // IR POR EL INPUT DE CAJAS EXISTENTES
         //AL NUMERO DE CAJAS LE SUMAMOS UNO PARA EL INCREMENTO
-        var box =  "<div class='input-field col s12' id='divBox"+(num.length+1)+"'><div class='input-field col s2'>"+
+        var box =  "<div class='input-field col s12' id='editdivBox"+(num.length+1)+"'><div class='input-field col s2'>"+
                        "<p><i class='fa fa-circle'></i></p>"+
                     "</div>"+
                     "<div class='input-field col s8'>"+
-                      "<input type='text' length='10' id='editCaja[]' value='' name='editCaja[]' onkeyup='calpeso($(this).val());'>"+
+                      "<input type='text' length='10' id='editcaja[]' value='' name='editcaja[]' onkeyup='calpeso(\"edit\",$(this).val());'>"+
                       "<label >PESO (KG)</label>"+
                     "</div>"+
                     "<div class='input-field col s2'>"+
-                      "<a class='waves-effect waves-teal btn-flat' onclick='deleteBox('edit',"+(num.length+1)+");'><i class='fa fa-times'></i></a>"+
+                      "<a class='waves-effect waves-teal btn-flat' onclick='deleteBox(\"edit\","+(num.length+1)+");'><i class='fa fa-times'></i></a>"+
                     "</div></div>";
         $('#editnewCajas').append(box); //AL DIV DE LA SECCION DE CAJAS LE CONCATENAMOS UN NUEVO INPUT 
-        $('#editcajasMuestra').val(num.length+1);   //AL INPUT DE NUMERO DE CAJAS LE AUMENTAMOS UNO. 
         $('#editcajasMuestra').val(num.length);  
     }
 

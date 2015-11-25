@@ -33,11 +33,17 @@
   });
 
 /*   FUNCION PARA SOLO MOSTRAR LA SECCIÓN DE ALTA DE CALCULO DE PESO   */
+    function initBack(){
+        $('#backMenu').show();
+        $('#backMenu').removeAttr('onclick');
+        $('#backMenu').attr('onclick','pesoIndex();');
+    }
     function altaPeso(){
           $('#index').hide();
           $('#alta').show();
           $('ul.tabs').tabs();
-           rowPredio();
+          initBack();
+          rowPredio();
           rowAnada();
           rowConfig(); 
     } 
@@ -201,8 +207,9 @@ function rowPeso(){
       $('#index').hide();
       $('#viewCalCajas').hide();
       $('#view').show();
+      initBack();
       var db = dbInicializar();
-    db.transaction(function(t) {
+        db.transaction(function(t) {
         t.executeSql("SELECT * FROM peso where id = ?", [id], function(transaction, results) {
           for (var i = 0; i < results.rows.length; i++) {
               var row = results.rows.item(i);
@@ -319,6 +326,11 @@ function rowPeso(){
       $('#editalertInt').hide();
       $('#view').hide();
       $('#edit').show();
+      $('#editfieldCajas').hide();
+      $('#editcalculoCajas').hide();
+      $('#editalertInt').hide();
+      initBack();
+
     var db = dbInicializar();
     db.transaction(function(t) {
         t.executeSql("SELECT * FROM peso where id = ?", [$('#viewId').val()], function(transaction, results) {
@@ -338,13 +350,19 @@ function rowPeso(){
             $('#editfecha').val(row.fecha);
             $('#editcostoUva').val(row.costoUva);
             $('#editpesoTotalNeto').val(row.pesoTotalNeto);
-            $('#edittotalCajas').val(row.totalCajas);
-            $('#editcajasMuestra').val(row.cajasMuestra);
-            $('#edittaraCaja').val(row.taraCaja);
-            $('#editpesoPromCaja').val(row.pesoPromCaja);
-            $('#editpesoPromNeto').val(row.pesoPromNeto);
-            $('#editpesoMuestra').val(row.pesoMuestra);
-            getBoxstoEdit();
+            if( row.taraCaja != ''){
+              $('#edittotalCajas').prop( "disabled", true );
+              $('#editfieldCajas').show();
+              $('#editcalculoCajas').show();
+              $('#edittotalCajas').val(row.totalCajas);
+              $('#editcajasMuestra').val(row.cajasMuestra);
+              $('#edittaraCaja').val(row.taraCaja);
+              $('#editpesoPromCaja').val(row.pesoPromCaja);
+              $('#editpesoPromNeto').val(row.pesoPromNeto);
+              $('#editpesoMuestra').val(row.pesoMuestra);
+              getBoxstoEdit();
+            }
+            
           }
         });
     });
@@ -362,7 +380,7 @@ function rowPeso(){
                     "</div>"+
                     "<div class='input-field col s8'>"+
                       "<input type='text' length='10' id='editcaja[]' value='"+row.peso+"' name='editcaja[]' onkeyup='calpeso(\"edit\", $(this).val());'>"+
-                      "<label >PESO (KG)</label>"+
+                      "<label class='active' >PESO (KG)</label>"+
                     "</div>"+
                     "<div class='input-field col s2'>"+
                       "<a class='waves-effect waves-teal btn-flat' onclick='deleteBox(\"edit\","+(i)+");'><i class='fa fa-times'></i></a>"+

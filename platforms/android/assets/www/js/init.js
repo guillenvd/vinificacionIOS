@@ -1,7 +1,8 @@
 /************* inicializar barrra y ocultar notificación de red *************/
     $( document ).ready(function(){  
+      $('#backMenu').hide();
       $(".button-collapse").sideNav({
-          menuWidtxxh: 240, // Default is 240
+          menuWidth: 240, // Default is 240
           edge: 'left', // Choose the horizontal origin
           closeOnClick: true // Closes side-nav on <a> clicks, useful for Angular/Meteor
         });
@@ -10,6 +11,7 @@
 
 /************* CONTROLADOR DE MENU DE LA APLICACION  *************/
     function maduraIndex() {
+        $('#backMenu').hide();
         $( "#body" ).load( "views/maduracionIndex.html" );
         $('.button-collapse').sideNav('hide');
         setTimeout(function(){ rowMaduracion(); }, 500);
@@ -17,6 +19,7 @@
     } 
 
     function pesoIndex(){
+        $('#backMenu').hide();
         $( "#body" ).load( "views/pesoIndex.html" );
         $('.button-collapse').sideNav('hide');
         setTimeout(function(){ rowPeso(); }, 500);
@@ -24,18 +27,25 @@
     } 
   
     function hostView() {
+        $('#backMenu').show();
+        $('#backMenu').removeAttr('onclick');
+        $('#backMenu').attr('onclick','inicio();');
         $( "#body" ).load( "views/host.html" );
         $('.button-collapse').sideNav('hide');
     } 
 
     function sincronizar() {
+        $('#backMenu').show();
+        $('#backMenu').removeAttr('onclick');
+        $('#backMenu').attr('onclick','inicio();');
         $( "#body" ).load( "views/json.html" );
         $('.button-collapse').sideNav('hide');
     } 
 
    function inicio(){
-         $( "#body" ).load( "views/inicio.html" );
-         $('.button-collapse').sideNav('hide');
+        $('#backMenu').hide();
+        $( "#body" ).load( "views/inicio.html" );
+        $('.button-collapse').sideNav('hide');
     }    
 
    function salir(){
