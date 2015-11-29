@@ -87,7 +87,6 @@
     function calpeso(ref,kg) {
       if(kg !='' && !isNaN(kg) && sumCajaKg(ref) != 0){
         var numCajas = document.getElementsByName(ref+"caja[]").length; 
-        alert(numCajas);
         var sumCajasKg = sumCajaKg(ref);
         pesoPromCaja(ref,numCajas,sumCajasKg);
       }
@@ -149,26 +148,26 @@
         var pesoPromNeto = $('#pesoPromNeto').val();
         var pesoMuestra = $('#pesoMuestra').val();
         var parameters= { fecha:fecha, costoUva:costoUva, pesoTotalNeto:pesoTotalNeto, totalCajas:totalCajas, cajasMuestra:cajasMuestra, taraCaja:taraCaja, pesoPromCaja:pesoPromCaja, pesoPromNeto:pesoPromNeto, pesoMuestra:pesoMuestra};    
-    if($('#checkInput').is(':checked')){
-          if(checkBoxs() && fecha !='' && costoUva !='' && pesoTotalNeto !='' && totalCajas !='' && cajasMuestra !='' && taraCaja !='' && pesoPromCaja !='' && pesoPromNeto !='' && pesoMuestra !=''){
-            getConfig(parameters, 2);
+        if($('#checkInput').is(':checked')){
+              if(checkBoxs('') && fecha !='' && costoUva !='' && pesoTotalNeto !='' && totalCajas !='' && cajasMuestra !='' && taraCaja !='' && pesoPromCaja !='' && pesoPromNeto !='' && pesoMuestra !=''){
+                getConfig(parameters, 2);
+              }
+              else{
+                Materialize.toast('No puede dejar campos vacios', 1500);
+              }
           }
           else{
-            Materialize.toast('No puede dejar campos vacios', 1500);
+            if(fecha !='' && costoUva !='' && pesoTotalNeto){
+                getConfig(parameters, 2);
+              }
+            else{
+                Materialize.toast('No puede dejar campos vacios', 1500);
+            }
           }
-      }
-      else{
-        if(fecha !='' && costoUva !='' && pesoTotalNeto){
-            getConfig(parameters, 2);
-          }
-        else{
-            Materialize.toast('No puede dejar campos vacios', 1500);
-        }
-      }
     }
-    function checkBoxs() {
+    function checkBoxs(ref) {
       var response = 1;
-        $('input[name^="caja"]').each(function(i) {
+        $('input[name^="'+ref+'caja"]').each(function(i) {
              if( isNaN($(this).val()) || $(this).val() == '' ){
                 response = 0;
              }
@@ -199,14 +198,24 @@ function rowPeso(){
        var  tb = document.getElementById('bodyPeso');
             tb.innerHTML = html;
     });
-  });
+  },
+    function(error) {
+      console.log('transaction error: ' + error.message);
+      db.close();
+    }, 
+    function() {
+      console.log('transaction ok');
+      db.close();
+    });
 }
 
   function viewPeso(id) {
       $('#alta').hide();
+      $('#edit').hide();
       $('#index').hide();
       $('#viewCalCajas').hide();
       $('#view').show();
+      $('#editTaraFlag').val('');
       initBack();
       var db = dbInicializar();
         db.transaction(function(t) {
@@ -231,6 +240,7 @@ function rowPeso(){
             $('#viewcostoUva').append(row.costoUva);
             $('#viewpesoTotalNeto').append(row.pesoTotalNeto);
             if(row.taraCaja != ''){
+              $('#editTaraFlag').val(row.taraCaja);
               $('#viewtotalCajas').append(row.totalCajas);
               $('#viewcajasMuestra').append(row.cajasMuestra);
               $('#viewtaraCaja').append(row.taraCaja);
@@ -305,7 +315,7 @@ function rowPeso(){
   function deleteBoxs() {
     var db = dbInicializar();
           db.transaction(function(t) {
-              t.executeSql("DELETE FROM cajas where calculoId = ?", [$('#viewId').val()], 
+              t.executeSql("DELETE FROM cajas where calculoId = ?", [parseInt($('#viewId').val())], 
                     function(tx, result) {   
                             Materialize.toast('Cálculo eliminado correctamente.', 1500);
                             pesoIndex();
@@ -335,7 +345,7 @@ function rowPeso(){
     db.transaction(function(t) {
         t.executeSql("SELECT * FROM peso where id = ?", [$('#viewId').val()], function(transaction, results) {
           for (var i = 0; i < results.rows.length; i++) {
-              var row = results.rows.item(i);
+            var row = results.rows.item(i);
             $('#editfecha').val('');
             $('#editcostoUva').val('');
             $('#editpesoTotalNeto').val('');
@@ -345,13 +355,11 @@ function rowPeso(){
             $('#editpesoPromCaja').val('');
             $('#editpesoPromNeto').val('');
             $('#editpesoMuestra').val('');
-
-            
             $('#editfecha').val(row.fecha);
             $('#editcostoUva').val(row.costoUva);
             $('#editpesoTotalNeto').val(row.pesoTotalNeto);
             if( row.taraCaja != ''){
-              $('#edittotalCajas').prop( "disabled", true );
+              $('#editpesoTotalNeto').prop( "disabled", true );
               $('#editfieldCajas').show();
               $('#editcalculoCajas').show();
               $('#edittotalCajas').val(row.totalCajas);
@@ -371,6 +379,8 @@ function rowPeso(){
   function getBoxstoEdit() {
     var db = dbInicializar();
     var box="";
+    $('#editExistCajas').empty();
+    $('#editnewCajas').empty();
       db.transaction(function(t) {
         t.executeSql("SELECT * FROM cajas where calculoId = ?", [$('#viewId').val()], function(transaction, results) {
           for (var i = 0; i < results.rows.length; i++) {
@@ -391,9 +401,6 @@ function rowPeso(){
         });
       });
   }
-
-            
-            
             
     function newEditBox() {
         var num = document.getElementsByName("editcaja[]"); // IR POR EL INPUT DE CAJAS EXISTENTES
@@ -412,9 +419,85 @@ function rowPeso(){
         $('#editcajasMuestra').val(num.length);  
     }
 
+    function update() {
+      var parameters = { fecha:"", costoUva:"", pesoTotalNeto:"", totalCajas:"", cajasMuestra:"", taraCaja:"", pesoPromCaja:"", pesoPromNeto:"", pesoMuestra:"" };
+
+      parameters.fecha = $('#editfecha').val();
+      parameters.costoUva = $('#editcostoUva').val();
+      parameters.pesoTotalNeto = $('#editpesoTotalNeto').val();
+      parameters.totalCajas =  $('#edittotalCajas').val();
+      parameters.cajasMuestra =  $('#editcajasMuestra').val();
+      parameters.taraCaja =  $('#edittaraCaja').val();
+      parameters.pesoPromCaja =  $('#editpesoPromCaja').val();
+      parameters.pesoPromNeto =  $('#editpesoPromNeto').val();
+      parameters.pesoMuestra =  $('#editpesoMuestra').val();
+      if( $('#editTaraFlag').val() != ""){
+          if(checkBoxs('edit') && ( parameters.fecha!="" && parameters.costoUva!="" && parameters.pesoTotalNeto !="" && parameters.totalCajas!="" && parameters.cajasMuestra!="" && parameters.taraCaja!="" && parameters.pesoPromCaja!="" && parameters.pesoPromNeto!="" && parameters.pesoMuestra!=""  ) ){
+            console.log('guardar cajas');
+            updatePeso(parameters);
+          }
+          else{
+            Materialize.toast('No puede dejar campos vacios', 1500);
+          }
+       }
+       else{
+          if(parameters.fecha!="" &&  parameters.costoUva!="" && parameters.pesoTotalNeto!=""){
+            updatePeso(parameters);
+          }
+          else{
+            Materialize.toast('No puede dejar campos vacios', 1500);
+          }
+       }
+      console.log(parameters);          
+    }
+function updatePeso(parameters) {
+    var id = parseInt($('#viewId').val());
+    var db = dbInicializar();
+        db.transaction(function(tx) {
+            tx.executeSql("UPDATE peso SET fecha = ?, costoUva = ?, pesoTotalNeto = ?, totalCajas = ?, cajasMuestra = ?, taraCaja = ?, pesoPromCaja = ?, pesoPromNeto = ?, pesoMuestra = ? WHERE id = ?",[parameters.fecha, parameters.costoUva, parameters.pesoTotalNeto, parameters.totalCajas, parameters.cajasMuestra, parameters.taraCaja, parameters.pesoPromCaja, parameters.pesoPromNeto, parameters.pesoMuestra,id], 
+            function(tx, result) {
+              if($('#editTaraFlag').val()==""){
+                Materialize.toast('Actualización correcta.', 4000);
+                  viewPeso($('#viewId').val());
+                  $('#viewId').val('');
+                  $('#editTaraFlag').val('');
+              }
+              else{
+                updateBoxs();
+              }
+            }, 
+            function(error) {
+                console.log('transaction error: ' + error.message);
+            });
+        });
+       
+  }
+
+  function updateBoxs() {
+      var idCalculo = parseInt($('#viewId').val());
+      var db = dbInicializar();
+      db.transaction(function(t) {
+          t.executeSql("DELETE FROM cajas where calculoId = ?", [idCalculo], 
+                        function(tx, result) {  
+                            $('input[name^="editcaja"]').each(function(i) {
+                                 console.log(idCalculo+""+$(this).val());
+                                 cajasRegister(idCalculo,$(this).val(),i+1,0);
+                            }); 
+                            Materialize.toast('Actualización correcta boxes.', 4000);
+                        },
+                        function(error){                                
+                            $('#viewId').val('');
+                        }
+              );
+          });
+
+      viewPeso($('#viewId').val());
+      $('#viewId').val('');
+      $('#editTaraFlag').val('');
+  }
 /*
   <i class="fa fa-check"></i>
   primero borrar las cajas
   y despues insertar llendo
-  por ellas
+  por las nuevas
 */

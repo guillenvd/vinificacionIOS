@@ -287,7 +287,7 @@ function pesoRegister(rancho, vinedo, variedad, bloque, anada, ranchoName, vined
     var db = dbInicializar();
     db.transaction(function(tx) {
       tx.executeSql('CREATE TABLE IF NOT EXISTS cajas (id integer primary key, ide text, calculoId text, peso text, numCaja text)');
-      tx.executeSql("INSERT INTO cajas (calculoId, peso, numCaja, ide) VALUES (?,?,?,?)", [calculoId, peso, index, ide],
+      tx.executeSql("INSERT INTO cajas (calculoId, peso, numCaja, ide) VALUES (?,?,?,?)", [parseInt(calculoId), peso, index, ide],
        function(tx, results){
        },
        function(tx, results){

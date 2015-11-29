@@ -83,7 +83,7 @@
               <input type="text"  id='pesoTotalNeto' >
           </div>
           <div class="input-field col s12" id="calculoCajas" >
-              <input type="text" id='totalCajas' onkeyup='calpeso($(this).val());'>
+              <input type="text" id='totalCajas' onkeyup='calpeso("",$(this).val());'>
               <label for="input_text"># Total de cajas</label>
           </div>
           <div class="input-field col s12">
@@ -104,7 +104,7 @@
             </div>
 
             <div class="input-field col s12">
-              <input type="text" id='taraCaja'  onkeyup='calpeso($(this).val());'>
+              <input type="text" id='taraCaja'  onkeyup='calpeso("",$(this).val());'>
               <label for="input_text">Tara cajas(Kg)</label>
             </div>
 
@@ -296,7 +296,7 @@
           </div>
           <!--div para cajas-->
           <div class="input-field col s12" id="editcalculoCajas" >
-              <input type="text" id='edittotalCajas' onkeyup='calpeso($(this).val());'/>
+              <input type="text" id='edittotalCajas' onkeyup='calpeso("edit",$(this).val());'/>
               <label class="active" for="input_text"># Total de cajas</label>
           </div>
 
@@ -306,14 +306,12 @@
             <legend>Cálculo de cajas</legend>
 
             <div class="input-field col s12">
-                <label class="active">Cajas de la muestra</label>
-            </div>
-            <div class="input-field col s12">
-              <input type="text" readonly="true" id="editcajasMuestra">
+              <input type="text" disabled="true" id="editcajasMuestra">
+              <label class="active">Cajas de la muestra</label>
             </div>
 
             <div class="input-field col s12">
-              <input type="text" id='edittaraCaja'  onkeyup='calpeso($(this).val());'>
+              <input type="text" id='edittaraCaja'  onkeyup='calpeso("edit",$(this).val());'>
               <label class="active" for="input_text">Tara cajas(Kg)</label>
             </div>
 
@@ -341,7 +339,7 @@
               <input type="text" disabled="true" id="editpesoMuestra">
             </div>
             
-            <a class="waves-effect waves-light btn" onclick="newBox();">agregar caja</a>
+            <a class="waves-effect waves-light btn" onclick="newEditBox();">agregar caja</a>
             
             <div id="cajas col s12">
               <h3> Lista de cajas </h3>
@@ -357,8 +355,8 @@
           Verifique los valores, existen letras o simbolos donde no debería
           </p>
           <br> 
-       <a class="waves-effect waves-light btn" onclick="saveConfig();">Actualizar</a>
-
+       <a class="waves-effect waves-light btn" onclick="update();">Actualizar</a>
+              <input type="hidden" id='editTaraFlag' value="">
       </div>
     </div>
 </div>
