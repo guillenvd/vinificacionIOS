@@ -25,6 +25,13 @@
         setTimeout(function(){ rowPeso(); }, 500);
 
     } 
+
+    function fermentacionIndex() {
+      $('#backMenu').hide();
+      $( "#body" ).load( "views/fermentacionIndex.html" );
+      $('.button-collapse').sideNav('hide');
+      setTimeout(function(){  }, 500);
+    }
   
     function hostView() {
         $('#backMenu').show();
@@ -49,7 +56,7 @@
     }    
 
    function salir(){
-         navigator.app.exitApp()
+        navigator.app.exitApp()
    }    
 
 /************* Funcion para verificar si exite conexion a internet o no  *************/
@@ -70,4 +77,9 @@
       else {
           $('#conexionInfo').hide();
       }
+
   }
+function checkDevice() {
+  var deviceType = (navigator.userAgent.match(/iPad/i))  == "iPad" ? "iPad" : (navigator.userAgent.match(/iPhone/i))  == "iPhone" ? "iPhone" : (navigator.userAgent.match(/Android/i)) == "Android" ? "Android" : (navigator.userAgent.match(/BlackBerry/i)) == "BlackBerry" ? "BlackBerry" : "null";
+  console.log(deviceType);
+}
