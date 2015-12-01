@@ -199,6 +199,23 @@ function rowBloque() {
   });
 }
 
+function rowMonitoreo(){
+  var db = dbInicializar();
+  var list="";
+    db.transaction(function(t) {
+        t.executeSql("SELECT * FROM monitoreo", [], function(transaction, results) {
+          alert(results.rows.length);
+          var monitoreo = document.getElementById("monitoreo");
+          for (var i = 0; i < results.rows.length; i++) {
+                var row = results.rows.item(i);
+                document.getElementById("log").innerHTML  ='<option value="'+row.ide+'">'+row.nombre+' (tanque '+row.id_tanque+')</option>';  
+                monitoreo.innerHTML+='<option value="'+row.ide+'">'+row.nombre+' (tanque '+row.id_tanque+')</option>';  
+          }
+    });
+  });
+}
+
+
 function anadaRegister(nombre, id) {
   var db = dbInicializar();
   db.transaction(function(tx) {
@@ -237,6 +254,14 @@ function bloqueRegister(nombre, id, sublote) {
   db.transaction(function(tx) {
     tx.executeSql('CREATE TABLE IF NOT EXISTS bloque (id integer primary key, nombre text, sublote text, ide text)');
     tx.executeSql("INSERT INTO bloque (nombre, ide, sublote) VALUES (?,?,?)", [nombre, id, sublote], null, null);
+  });
+}
+
+function monitoreoRegister(ide, nombre, id_tanque) {
+  var db = dbInicializar();
+  db.transaction(function(tx) {
+    tx.executeSql('CREATE TABLE IF NOT EXISTS monitoreo (id integer primary key, ide text, nombre text, id_tanque)');
+    tx.executeSql("INSERT INTO monitoreo (nombre, ide, id_tanque) VALUES (?,?,?)", [nombre, ide, id_tanque],function(){/*success*/},function () {/*error*/});
   });
 }
 
