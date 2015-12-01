@@ -324,7 +324,6 @@ function pesoRegister(rancho, vinedo, variedad, bloque, anada, ranchoName, vined
   }
 
 function fermentacionRegister(monitoreoId, fecha, grados, temperatura,vinoBase, ide) {
-  dropTable("fermentacion");
   var db = dbInicializar();
   db.transaction(function(tx) {
     tx.executeSql('CREATE TABLE IF NOT EXISTS fermentacion (id integer primary key, ide text, monitoreoId text, fecha text, grados text, temperatura text, vinoBase text)');

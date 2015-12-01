@@ -70,7 +70,6 @@
                 $('#viewId').val('');
                 $('#btns').hide();
               }
-            clearTable();
             $('#viewfecha').append(row.fecha); 
             $('#viewvinoBase').append(row.vinoBase);
             $('#viewgrados').append(row.grados);
@@ -81,6 +80,44 @@
         });
     }
 
+    function editarFermentacion() {
+        $('#index').hide(); 
+        $('#alertInt').hide(); 
+        $('#editar').show(); 
+        $('#alta').hide(); 
+        $('#view').hide(); 
+       var db = dbInicializar();
+        db.transaction(function(t) {
+        t.executeSql("SELECT * FROM fermentacion where id = ?", [parseInt($('#viewId').val())], function(transaction, results) {
+          for (var i = 0; i < results.rows.length; i++) {
+            $('#editfecha').val(row.fecha); 
+            $('#editvinobase').val(row.vinoBase);
+            $('#editgrados').val(row.grados);
+            $('#edittemperatura').val(row.temperatura);
+            
+          }
+         });
+        });
+    }
+
+    function updateFermentacion() {
+    var id = parseInt($('#viewId').val());
+    var db = dbInicializar();
+        db.transaction(function(tx) {
+            tx.executeSql("UPDATE fermentacion SET fecha = ?, grados = ?, temperatura = ? WHERE id = ?",[$('#editfecha').val(),$('#editgrados').val(), $('#edittemperatura').val(),id], 
+            function(tx, result) {
+                Materialize.toast('Actualización correcta.', 4000);
+                viewFermentacion($('#viewId').val());
+                $('#viewId').val('');
+                $('#editTaraFlag').val('');
+             
+            }, 
+            function(error) {
+                console.log('transaction error: ' + error.message);
+            });
+        });
+       
+  }
     function rowFermentacion(){
       var db = dbInicializar();
       var html="";

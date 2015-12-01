@@ -38,7 +38,7 @@
           $('#index').hide();
           $('#alta').show();
           $('ul.tabs').tabs();
-          initBack();
+          initBack('peso');
           rowPredio();
           rowAnada();
           rowConfig(); 
@@ -212,7 +212,7 @@ function rowPeso(){
       $('#viewCalCajas').hide();
       $('#view').show();
       $('#editTaraFlag').val('');
-      initBack();
+      initBack('peso');
       var db = dbInicializar();
         db.transaction(function(t) {
         t.executeSql("SELECT * FROM peso where id = ?", [id], function(transaction, results) {
@@ -335,7 +335,7 @@ function rowPeso(){
       $('#editfieldCajas').hide();
       $('#editcalculoCajas').hide();
       $('#editalertInt').hide();
-      initBack();
+      initBack('peso');
 
     var db = dbInicializar();
     db.transaction(function(t) {

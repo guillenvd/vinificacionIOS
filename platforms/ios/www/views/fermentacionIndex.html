@@ -104,51 +104,27 @@
 <div id="editar" class="center"> 
     <div class="row">
       <div id="regi" class="col s12">
-              <h4>Editar Registro</h4>
+               <h4>Editar Registro</h4>
+           <div class="input-field col s12">
+              <input type="text" id='editvinobase' disabled="true">
+              <label class="active" for="input_text">Vino Base</label>
+          </div>
+          <div class="input-field col s12">
+                <label class="active" for="fecha">Fecha de registro</label>
+                <input id="editfecha" type="text" class="datepicker">
+          </div>
+          <div class="input-field col s12">
+              <input type="text" id='editgrados'>
+              <label class="active" for="input_text">Grados brix</label>
+          </div>
+          <div class="input-field col s12">
+            <input type="text"  id='edittemperatura' >
+            <label class="active" for="input_text">Temperatura</label>
 
-              <div class="input-field col s12">
-                  <label for="editfecha">Fecha registro</label>
-              </div>
-              <div class="input-field col s12">
-                    <input id="editfecha" type="text" class="datepicker">
-              </div>
-
-              <div class="input-field col s12">
-                  <label for="editsolidos">Sólidos solubles</label>
-              </div>              
-              <div class="input-field col s12">
-                  <input id="editsolidos" type="text" >
-              </div>
-
-              <div class="input-field col s12">
-                  <label for="editph">pH</label>
-              </div>  
-              <div class="input-field col s12">
-                  <input id="editph" type="text">
-              </div>
-
-              <div class="input-field col s12">
-                  <label for="editat">AT</label>
-              </div> 
-              <div class="input-field col s12">
-                  <input id="editat" type="text" >
-              </div>
-
-              <div class="input-field col s12">
-                  <label for="editbrph">Br * pH </label>
-              </div>
-
-              <div class="input-field col s12">
-                  <input id="editbrph" type="text" class="browser-default"  disabled="true"  class="validate">
-              </div>
-
-              <div class="input-field col s12">
-                  <label for="viewbrat">Br / AT</label>
-              </div>
-              <div class="input-field col s12">
-                  <input id="editbrat" type="text" class="browser-default"  disabled="true" class="validate">
-              </div>        
-          <br> <a class="waves-effect waves-light btn " onclick="updatePeso();">Actualizar</a>
+          </div>
+         
+          <br>
+          <br> <a class="waves-effect waves-light btn " onclick="updateFermentacion();">Actualizar</a>
 
       </div>
     </div>
