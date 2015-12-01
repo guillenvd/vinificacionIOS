@@ -200,17 +200,18 @@ function rowBloque() {
 }
 
 function rowMonitoreo(){
+  $('select').material_select('destroy');
   var db = dbInicializar();
   var list="";
-    db.transaction(function(t) {
+  db.transaction(function(t) {
         t.executeSql("SELECT * FROM monitoreo", [], function(transaction, results) {
-          alert(results.rows.length);
           var monitoreo = document.getElementById("monitoreo");
           for (var i = 0; i < results.rows.length; i++) {
                 var row = results.rows.item(i);
-                document.getElementById("log").innerHTML  ='<option value="'+row.ide+'">'+row.nombre+' (tanque '+row.id_tanque+')</option>';  
                 monitoreo.innerHTML+='<option value="'+row.ide+'">'+row.nombre+' (tanque '+row.id_tanque+')</option>';  
           }
+          $('select').material_select();
+
     });
   });
 }
@@ -260,7 +261,7 @@ function bloqueRegister(nombre, id, sublote) {
 function monitoreoRegister(ide, nombre, id_tanque) {
   var db = dbInicializar();
   db.transaction(function(tx) {
-    tx.executeSql('CREATE TABLE IF NOT EXISTS monitoreo (id integer primary key, ide text, nombre text, id_tanque)');
+    tx.executeSql('CREATE TABLE IF NOT EXISTS monitoreo (id integer primary key, ide text, nombre text, id_tanque text)');
     tx.executeSql("INSERT INTO monitoreo (nombre, ide, id_tanque) VALUES (?,?,?)", [nombre, ide, id_tanque],function(){/*success*/},function () {/*error*/});
   });
 }
@@ -286,6 +287,7 @@ function maduracionRegister(rancho, vinedo, variedad, bloque, anada,fecha,solido
   });
   
 }
+
 function pesoRegister(rancho, vinedo, variedad, bloque, anada, ranchoName, vinedoName, variedadName, bloqueName, anadaName, fecha, costoUva, pesoTotalNeto, totalCajas, cajasMuestra, taraCaja, pesoPromCaja, pesoPromNeto, pesoMuestra, ide) {
   var db = dbInicializar();
   db.transaction(function(tx) {
@@ -321,5 +323,20 @@ function pesoRegister(rancho, vinedo, variedad, bloque, anada, ranchoName, vined
     });
   }
 
+function fermentacionRegister(monitoreoId, fecha, grados, temperatura,vinoBase, ide) {
+  dropTable("fermentacion");
+  var db = dbInicializar();
+  db.transaction(function(tx) {
+    tx.executeSql('CREATE TABLE IF NOT EXISTS fermentacion (id integer primary key, ide text, monitoreoId text, fecha text, grados text, temperatura text, vinoBase text)');
+    tx.executeSql("INSERT INTO fermentacion (monitoreoId, fecha, grados, temperatura, vinoBase, ide) VALUES (?,?,?,?,?,?)", [monitoreoId, fecha, grados, temperatura,vinoBase,ide],
+    function(){
+      fermentacionIndex() 
+      Materialize.toast('Registro creado con exito', 1500);
+    },
+    function () {
+      Materialize.toast('Algo salio mal.', 1500);
+    });
+  });
+}
 
 

@@ -33,11 +33,7 @@
   });
 
 /*   FUNCION PARA SOLO MOSTRAR LA SECCIÓN DE ALTA DE CALCULO DE PESO   */
-    function initBack(){
-        $('#backMenu').show();
-        $('#backMenu').removeAttr('onclick');
-        $('#backMenu').attr('onclick','pesoIndex();');
-    }
+
     function altaPeso(){
           $('#index').hide();
           $('#alta').show();
