@@ -8,7 +8,11 @@
         });
       $('#conexionInfo').hide();
     });
-
+    function initBack(site){
+        $('#backMenu').show();
+        $('#backMenu').removeAttr('onclick');
+        $('#backMenu').attr('onclick',site+'Index();');
+    }
 /************* CONTROLADOR DE MENU DE LA APLICACION  *************/
     function maduraIndex() {
         $('#backMenu').hide();
@@ -30,7 +34,7 @@
       $('#backMenu').hide();
       $( "#body" ).load( "views/fermentacionIndex.html" );
       $('.button-collapse').sideNav('hide');
-      setTimeout(function(){  }, 500);
+      setTimeout(function(){  rowFermentacion() }, 500);
     }
   
     function hostView() {

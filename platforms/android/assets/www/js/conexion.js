@@ -115,6 +115,29 @@
           });
   }
 
+  function monitoreoJson(servidor){
+          var x = "0";
+          $.ajax({
+                type: "POST",
+                dataType: "json",
+                timeout : 10000,
+                url: "http://"+servidor+"/web/app-php/monitoreo.php", 
+                data: x,
+                success: function(data) {
+                          dropTable("monitoreo");
+                          $.each(data, function(i,item){ 
+                            monitoreoRegister(item.id, item.nombre, item.id_tanque);
+                          });
+                          Materialize.toast('Vinos bases Sincronizados.', 1500);
+                }, 
+                error: function() {
+                          Materialize.toast('Ha ocurrido un error al sincronizar Vinos Base', 1500);
+                          $('#SyncBtn').show();
+                          $('#loadDiv').hide();
+                }
+          });
+  }
+
   function showHost(transaction, results) {
       var i=0; 
       var list='';
@@ -168,4 +191,5 @@
       subloteJson(servidor);
       bloqueJson(servidor);
       anadaJson(servidor);
+      monitoreoJson(servidor);
   }
