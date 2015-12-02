@@ -1,37 +1,21 @@
 	$(document).ready(function(){ 
 		$('#alta').hide(); 
 		$('#view').hide(); 
-		$('#alertInt').hide(); 
+    $('#noNum').hide(); 
 		$('#editar').hide(); 
-        $("input[id='grados']").keydown(function (event) {
+        $("#grados,#temperatura,#edittemperatura,#editgrados").keydown(function (event) {
             if (event.shiftKey == true) {
-                event.preventDefault();
+               event.preventDefault();
             }
-            if ((event.keyCode >= 48 && event.keyCode <= 57) || (event.keyCode >= 96 && event.keyCode <= 105) || event.keyCode == 8 || event.keyCode == 9 || event.keyCode == 37 || event.keyCode == 39 || event.keyCode == 46 || event.keyCode == 190) {
-
-            } 
-            else {
-                event.preventDefault();
+            if ( !( (event.keyCode >= 48 && event.keyCode <= 57) || (event.keyCode >= 96 && event.keyCode <= 105) || event.keyCode == 8 || event.keyCode == 9 || event.keyCode == 37 || event.keyCode == 39 || event.keyCode == 46 || event.keyCode == 190|| event.keyCode == 189 ) ) {
+               event.preventDefault();
             }
-            if($(this).val().indexOf('.') !== -1 && event.keyCode == 190){
-                event.preventDefault();
+            if(($(this).val().indexOf('.') !== -1 && event.keyCode == 190)  || ( $(this).val().indexOf('-') !== -1 && event.keyCode == 189)){
+               event.preventDefault();
             }
 
         });
-        $("input[id='temperatura']").keydown(function (event) {
-            if (event.shiftKey == true) {
-                event.preventDefault();
-            }
-            if ((event.keyCode >= 48 && event.keyCode <= 57) || (event.keyCode >= 96 && event.keyCode <= 105) || event.keyCode == 8 || event.keyCode == 9 || event.keyCode == 37 || event.keyCode == 39 || event.keyCode == 46 || event.keyCode == 190) {
-            } 
-            else {
-                event.preventDefault();
-            }
-            if($(this).val().indexOf('.') !== -1 && event.keyCode == 190){
-                event.preventDefault();
-            }
-
-        });    
+        
         rowFermentacion();
    });
 
@@ -39,7 +23,7 @@
     function altaFermentacion(argument) {
         $('#index').hide(); 
         $('#view').hide(); 
-        $('#alertInt').hide(); 
+        $('#noNum').hide(); 
         $('#editar').hide(); 
         $('#alta').show(); 
         $('.datepicker').pickadate({
@@ -53,10 +37,11 @@
     function viewFermentacion(argument) {
         initBack('fermentacion');
         $('#index').hide(); 
-        $('#alertInt').hide(); 
+        $('#noNum').hide(); 
         $('#editar').hide(); 
         $('#alta').hide(); 
         $('#view').show(); 
+
         var db = dbInicializar();
         db.transaction(function(t) {
         t.executeSql("SELECT * FROM fermentacion where id = ?", [argument], function(transaction, results) {
@@ -70,6 +55,11 @@
                 $('#viewId').val('');
                 $('#btns').hide();
               }
+              $('#viewfecha').empty(); 
+            $('#viewvinoBase').empty();
+            $('#viewgrados').empty();
+            $('#viewtemperatura').empty();
+
             $('#viewfecha').append(row.fecha); 
             $('#viewvinoBase').append(row.vinoBase);
             $('#viewgrados').append(row.grados);
@@ -81,48 +71,64 @@
     }
 
     function editarFermentacion() {
+        $('#noNumEdit').hide();
         $('#index').hide(); 
-        $('#alertInt').hide(); 
+        $('#noNum').hide(); 
         $('#editar').show(); 
         $('#alta').hide(); 
         $('#view').hide(); 
+         $('.datepicker').pickadate({
+            selectMonths: true, 
+            selectYears: 15
+        });
        var db = dbInicializar();
         db.transaction(function(t) {
         t.executeSql("SELECT * FROM fermentacion where id = ?", [parseInt($('#viewId').val())], function(transaction, results) {
           for (var i = 0; i < results.rows.length; i++) {
-            $('#editfecha').val(row.fecha); 
-            $('#editvinobase').val(row.vinoBase);
-            $('#editgrados').val(row.grados);
-            $('#edittemperatura').val(row.temperatura);
-            
-          }
+                var row = results.rows.item(i);
+                $('#editfecha').val(row.fecha); 
+                $('#editvinobase').val(row.vinoBase);
+                $('#editgrados').val(row.grados);
+                $('#edittemperatura').val(row.temperatura);
+            }
          });
         });
     }
 
     function updateFermentacion() {
-    var id = parseInt($('#viewId').val());
-    var db = dbInicializar();
-        db.transaction(function(tx) {
-            tx.executeSql("UPDATE fermentacion SET fecha = ?, grados = ?, temperatura = ? WHERE id = ?",[$('#editfecha').val(),$('#editgrados').val(), $('#edittemperatura').val(),id], 
-            function(tx, result) {
-                Materialize.toast('Actualización correcta.', 4000);
-                viewFermentacion($('#viewId').val());
-                $('#viewId').val('');
-                $('#editTaraFlag').val('');
-             
-            }, 
-            function(error) {
-                console.log('transaction error: ' + error.message);
-            });
-        });
+    if($('#editfecha').val() !="" && $('#editgrados').val() !="" && $('#edittemperatura').val() !="" ){
+        if( (!isNaN($('#editgrados').val()) &&  !isNaN($('#edittemperatura').val()) ) && ( (parseFloat($('#editgrados').val())>=-2 && parseFloat($('#editgrados').val()) <=28) && (parseFloat($('#edittemperatura').val())>=-2 && parseFloat($('#edittemperatura').val()) <=28) ) ){
+                var id = parseInt($('#viewId').val());
+                var db = dbInicializar();
+                db.transaction(function(tx) {
+                    tx.executeSql("UPDATE fermentacion SET fecha = ?, grados = ?, temperatura = ? WHERE id = ?",[$('#editfecha').val(),$('#editgrados').val(), $('#edittemperatura').val(),id], 
+                    function(tx, result) {
+                        Materialize.toast('Actualización correcta.', 4000);
+                        viewFermentacion($('#viewId').val());
+                        $('#viewId').val('');             
+                    }, 
+                    function(error) {
+                        console.log('transaction error: ' + error.message);
+                    });
+                });
+
+        }
+        else{
+            $('#noNumEdit').show();
+        }
+    }
+    else{
+          Materialize.toast('No puede dejar campos vacios', 1500);
+    }
+
+    
        
   }
     function rowFermentacion(){
       var db = dbInicializar();
       var html="";
       db.transaction(function(t) {
-        t.executeSql("SELECT * FROM fermentacion ORDER BY id DESC", [], function(transaction, results) {
+        t.executeSql("SELECT * FROM fermentacion ORDER BY fecha DESC", [], function(transaction, results) {
           for (var i = 0; i < results.rows.length; i++) {
             var row = results.rows.item(i);
             html += '<tr>'
@@ -153,8 +159,12 @@
 
 		};
 		if(parameters.monitoreoId !="" && parameters.fecha !="" && parameters.temperatura !="" && parameters.grados !="" ){
-
-			fermentacionRegister(parameters.monitoreoId, parameters.fecha, parameters.grados, parameters.temperatura, parameters.vinoBase,0);
+        if( (!isNaN(parameters.temperatura) &&  !isNaN(parameters.grados) ) && ( (parseFloat(parameters.temperatura)>=-2 && parseFloat(parameters.temperatura) <=28) && (parseFloat(parameters.grados)>=-2 && parseFloat(parameters.grados) <=28) ) ){
+          fermentacionRegister(parameters.monitoreoId, parameters.fecha, parameters.grados, parameters.temperatura, parameters.vinoBase,0);
+        }
+        else{
+            $('#noNum').show();
+        }
 		}
 		else{
 	        Materialize.toast('No puede dejar campos vacios', 1500);

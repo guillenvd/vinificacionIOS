@@ -45,6 +45,21 @@
 	          brat('edit');
 	        }
     	}); 
+    	$("#solidos,#ph,#at,#editsolidos,#editph,#editat").keydown(function (event) {
+            if (event.shiftKey == true) {
+               event.preventDeufault();
+            }
+            if ((event.keyCode >= 48 && event.keyCode <= 57) || (event.keyCode >= 96 && event.keyCode <= 105) || event.keyCode == 8 || event.keyCode == 9 || event.keyCode == 37 || event.keyCode == 39 || event.keyCode == 46 || event.keyCode == 190) {
+            } 
+            else {
+               event.preventDefault();
+            }
+            if($(this).val().indexOf('.') !== -1 && event.keyCode == 190){
+               event.preventDefault();
+            }
+
+        });
+        
 
 	});
 
@@ -56,9 +71,11 @@
 	        $('ul.tabs').tabs();
 	        rowPredio();
 	        rowAnada();
+	        initBack('madura');
 	        rowConfig();
 	}
 	function viewMaduracion(id) {
+	    initBack('madura');
 	    $('#editar').hide();
 	    $('#index').hide();
 	    $('#view').show();
@@ -103,6 +120,7 @@
 
 	}
 	function editarMaduracion() {
+		initBack('madura');
 	    $('#editar').show();
 	    $('#index').hide();
 	    $('#alta').hide();
@@ -165,7 +183,7 @@ function rowMaduracion(){
   var db = dbInicializar();
   var html="";
   db.transaction(function(t) {
-    t.executeSql("SELECT * FROM maduracion ORDER BY id DESC", [], function(transaction, results) {
+    t.executeSql("SELECT * FROM maduracion ORDER BY fecha DESC", [], function(transaction, results) {
       for (var i = 0; i < results.rows.length; i++) {
         var row = results.rows.item(i);
         html += '<tr>'

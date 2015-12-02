@@ -39,16 +39,18 @@
             </div>
             <div class="input-field col s12">
                 <input id="grados" type="text" >
-                <label for="grados">Grados Brix</label>
+                <label for="grados" >Grados Brix</label>
             </div>
             <div class="input-field col s12">
                   <input id="temperatura" type="text" placeholder="Centigrados">
-                  <label for="temperatura">Temperatura</label>
+                  <label for="temperatura" >Temperatura</label>
             </div>
             <br/>  
-          <p id='alertInt' class="textRojo">
-            Verifique los valores, existen letras o simbolos donde no debería
-          </p>
+          <p id='noNum' class="textRojo">
+            Verifique que en Grados Brix o Temperaturas solo existan numeros y que esten en el rango de -2 a 28.
+          </p>          
+        
+
             <a class="waves-effect waves-light btn" onclick="saveRegister();">Guardar</a>
           
       </div>
@@ -94,7 +96,6 @@
         <ul>
           <li><a class="btn-floating red"  onclick="deleteRow();"><i class="fa fa-trash-o"></i></a></li>
           <li><a class="btn-floating yellow darken-1" onclick="editarFermentacion();"><i class="fa fa-pencil"></i></a></li>
-          <li><a class="btn-floating green" onclick="fermentacionIndex();"><i class="fa fa-arrow-left"></i></a></li>
         </ul>
       </div>
 
@@ -122,7 +123,9 @@
             <label class="active" for="input_text">Temperatura</label>
 
           </div>
-         
+          <p id='noNumEdit' class="textRojo">
+            Verifique que en Grados Brix o Temperaturas solo existan numeros y que esten en el rango de -2 a 28.
+          </p>    
           <br>
           <br> <a class="waves-effect waves-light btn " onclick="updateFermentacion();">Actualizar</a>
 
