@@ -146,7 +146,7 @@ rowPeso();
         var parameters= { fecha:fecha, costoUva:costoUva, pesoTotalNeto:pesoTotalNeto, totalCajas:totalCajas, cajasMuestra:cajasMuestra, taraCaja:taraCaja, pesoPromCaja:pesoPromCaja, pesoPromNeto:pesoPromNeto, pesoMuestra:pesoMuestra};    
         if($('#checkInput').is(':checked')){
               if(checkBoxs('') && fecha !='' && costoUva !='' && pesoTotalNeto !='' && totalCajas !='' && cajasMuestra !='' && taraCaja !='' && pesoPromCaja !='' && pesoPromNeto !='' && pesoMuestra !=''){
-                getConfig(parameters, 2);
+                validatePeso(parameters);
               }
               else{
                 Materialize.toast('No puede dejar campos vacios', 1500);
@@ -154,13 +154,35 @@ rowPeso();
           }
           else{
             if(fecha !='' && costoUva !='' && pesoTotalNeto){
-                getConfig(parameters, 2);
+                validatePeso(parameters);
               }
             else{
                 Materialize.toast('No puede dejar campos vacios', 1500);
             }
           }
     }
+
+    function validatePeso(parameters){
+        var db = dbInicializar();
+        var response = 0;
+        db.transaction(function(t) {
+          t.executeSql("SELECT * FROM peso", [], function(transaction, results) {
+            for(var i = 0; i < results.rows.length; i++) {
+                var row = results.rows.item(i);
+                if(row.fecha == parameters.fecha && $('#bloque option:selected').val() == row.bloque){  
+                  response = 1;
+                }
+              }
+              if(parseInt(response)==0){
+                  getConfig(parameters, 2);/// se envian los campos para ser guardados
+              }else{
+              Materialize.toast('Ya existe una fecha registrada para este bloque.', 1500);
+              }
+          });
+        });
+        
+      }
+
     function checkBoxs(ref) {
       var response = 1;
         $('input[name^="'+ref+'caja"]').each(function(i) {
@@ -171,39 +193,39 @@ rowPeso();
       return response;
     }
 
-function rowPeso(){
-  var db = dbInicializar();
-  var html="";
-  db.transaction(function(t) {
-    t.executeSql("SELECT * FROM peso ORDER BY fecha DESC", [], function(transaction, results) {
-      for (var i = 0; i < results.rows.length; i++) {
-        var row = results.rows.item(i);
-        html += '<tr>'
-                     +'<td>'+row.fecha+'</td>'
-                     +'<td>'+row.variedadName+'</td>'
-                     +'<td>'+row.bloqueName+'</td>'
-                     +'<td>'+row.anadaName+'</td>'
-                     +'<td>'
-                          +'<ul class="collection">'
-                              +'<a href="#!" class="collection-item center-align" onclick="viewPeso('+row.id+');"><i class="fa fa-th-list"></i></a>'
-                          +'</ul>'
-                     +' </td>'
-                  +' </tr>';
+  function rowPeso(){
+    var db = dbInicializar();
+    var html="";
+    db.transaction(function(t) {
+      t.executeSql("SELECT * FROM peso ORDER BY fecha DESC", [], function(transaction, results) {
+        for (var i = 0; i < results.rows.length; i++) {
+          var row = results.rows.item(i);
+          html += '<tr>'
+                       +'<td>'+row.fecha+'</td>'
+                       +'<td>'+row.variedadName+'</td>'
+                       +'<td>'+row.bloqueName+'</td>'
+                       +'<td>'+row.anadaName+'</td>'
+                       +'<td>'
+                            +'<ul class="collection">'
+                                +'<a href="#!" class="collection-item center-align" onclick="viewPeso('+row.id+');"><i class="fa fa-th-list"></i></a>'
+                            +'</ul>'
+                       +' </td>'
+                    +' </tr>';
 
-       }
-       var  tb = document.getElementById('bodyPeso');
-            tb.innerHTML = html;
-    });
-  },
-    function(error) {
-      console.log('transaction error: ' + error.message);
-      db.close();
-    }, 
-    function() {
-      console.log('transaction ok');
-      db.close();
-    });
-}
+         }
+         var  tb = document.getElementById('bodyPeso');
+              tb.innerHTML = html;
+      });
+    },
+      function(error) {
+        console.log('transaction error: ' + error.message);
+        db.close();
+      }, 
+      function() {
+        console.log('transaction ok');
+        db.close();
+      });
+  }
 
   function viewPeso(id) {
       $('#alta').hide();
