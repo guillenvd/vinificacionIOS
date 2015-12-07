@@ -45,7 +45,21 @@
 	          brat('edit');
 	        }
     	}); 
+    	$("#solidos,#ph,#at,#editsolidos,#editph,#editat").keydown(function (event) {
+            if (event.shiftKey == true) {
+               event.preventDeufault();
+            }
+            if ((event.keyCode >= 48 && event.keyCode <= 57) || (event.keyCode >= 96 && event.keyCode <= 105) || event.keyCode == 8 || event.keyCode == 9 || event.keyCode == 37 || event.keyCode == 39 || event.keyCode == 46 || event.keyCode == 190) {
+            } 
+            else {
+               event.preventDefault();
+            }
+            if($(this).val().indexOf('.') !== -1 && event.keyCode == 190){
+               event.preventDefault();
+            }
 
+        });
+        rowMaduracion();
 	});
 
 /********** Controlador de maduración  ************************/
@@ -56,9 +70,14 @@
 	        $('ul.tabs').tabs();
 	        rowPredio();
 	        rowAnada();
-	        rowConfig();
+	        initBack('madura');
+	        setTimeout(function(){ rowConfig(); }, 500);
+	        $('#noNumEditSolidos').hide();
+			$('#noNumEditAt').hide();
+ 			$('#noNumEditPh').hide();
 	}
 	function viewMaduracion(id) {
+	    initBack('madura');
 	    $('#editar').hide();
 	    $('#index').hide();
 	    $('#view').show();
@@ -103,6 +122,7 @@
 
 	}
 	function editarMaduracion() {
+		initBack('madura');
 	    $('#editar').show();
 	    $('#index').hide();
 	    $('#alta').hide();
@@ -145,17 +165,40 @@
     }
 
 /************* funcion para validar los campos antes de guardar *************/
-	function saveMaduracion() {
-	      var fecha = $('#fecha').val();
-	      var solidos = $('#solidos').val();
-	      var ph = $('#ph').val();
-	      var at = $('#at').val();
-	      var brph = $('#brph').val();
-	      var brat = $('#brat').val();
-	    if(fecha!='' && solidos!='' && ph!='' && at!='' && brph!='' && brat){
-	      var parameters = { fecha:fecha, solidos:solidos, ph:ph, at:at, brph:brph, brat:brat};
-	      getConfig(parameters,1);/// se envian los campos para ser guardados
-	    }
+	function saveMaduracion(){
+		  rowConfig();
+		 var parameters = { fecha:$('#fecha').val(), 
+		 					solidos:$('#solidos').val(),
+		 					ph:$('#ph').val(), 
+		 					at:$('#at').val(), 
+		 					brph:$('#brph').val(), 
+		 					brat:$('#brat').val()
+		 				};
+	    if( parameters.fecha!='' && parameters.solidos!='' && parameters.ph!='' && parameters.at!='' && parameters.brph!='' && parameters.brat){
+		    if( (parseFloat(parameters.solidos)>= 0 && parseFloat(parameters.solidos) <=28) && (parseFloat(parameters.at)>= 0 && parseFloat(parameters.at) <=20) && (parseFloat(parameters.ph)>= 2 && parseFloat(parameters.ph) <=4) ){
+		     		validateMaduracion(parameters);
+		 	}
+		 	else{
+		 		if( !(parseFloat(parameters.solidos)>= 0 && parseFloat(parameters.solidos) <=28) ){
+		 			$('#noNumEditSolidos').show();
+		 		}
+		 		else{
+		 			$('#noNumEditSolidos').hide();
+		 		}
+		 		if( !(parseFloat(parameters.at)>= 0 && parseFloat(parameters.at) <=20) ){
+		 			$('#noNumEditAt').show();
+		 		}
+		 		else{
+		 			$('#noNumEditAt').hide();
+		 		}
+		 		if( !(parseFloat(parameters.ph)>= 2 && parseFloat(parameters.ph) <=4) ){
+		 			$('#noNumEditPh').show();
+		 		}
+		 		else{
+		 			$('#noNumEditPh').hide();
+		 		}	    
+		 	}
+		 }
 	    else{
 	        Materialize.toast('No puede dejar campos vacios', 1500);
 	    }
@@ -165,7 +208,7 @@ function rowMaduracion(){
   var db = dbInicializar();
   var html="";
   db.transaction(function(t) {
-    t.executeSql("SELECT * FROM maduracion ORDER BY id DESC", [], function(transaction, results) {
+    t.executeSql("SELECT * FROM maduracion ORDER BY fecha DESC", [], function(transaction, results) {
       for (var i = 0; i < results.rows.length; i++) {
         var row = results.rows.item(i);
         html += '<tr>'
@@ -218,4 +261,27 @@ function updateMaduracion() {
         viewMaduracion( $('#viewId').val());
         $('#viewId').val('');
 
+}
+
+
+function validateMaduracion(parameters){
+  var db = dbInicializar();
+  var response = 0;
+  db.transaction(function(t) {
+    t.executeSql("SELECT * FROM maduracion", [], function(transaction, results) {
+     	for(var i = 0; i < results.rows.length; i++) {
+        	var row = results.rows.item(i);
+        	console.log(row.fecha+'-'+parameters.fecha+'/\\'+$('#bloque option:selected').val()+'-'+row.bloque);
+        	if(row.fecha == parameters.fecha && $('#bloque option:selected').val() == row.bloque){	
+        		response = 1;
+        	}
+       	}
+       	if(parseInt(response)==0){
+		   getConfig(parameters,1);/// se envian los campos para ser guardados
+       	}else{
+		    Materialize.toast('Ya existe una fecha igual registrada para este bloque.', 1500);
+       	}
+    });
+  });
+  
 }

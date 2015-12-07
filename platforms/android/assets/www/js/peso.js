@@ -29,7 +29,7 @@
             $('#pesoTotalNeto').removeProp( "disabled" )
           }       
         });
-
+rowPeso();
   });
 
 /*   FUNCION PARA SOLO MOSTRAR LA SECCIÓN DE ALTA DE CALCULO DE PESO   */
@@ -175,7 +175,7 @@ function rowPeso(){
   var db = dbInicializar();
   var html="";
   db.transaction(function(t) {
-    t.executeSql("SELECT * FROM peso ORDER BY id DESC", [], function(transaction, results) {
+    t.executeSql("SELECT * FROM peso ORDER BY fecha DESC", [], function(transaction, results) {
       for (var i = 0; i < results.rows.length; i++) {
         var row = results.rows.item(i);
         html += '<tr>'

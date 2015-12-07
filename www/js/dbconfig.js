@@ -43,28 +43,25 @@ function dropTable(table) {
       var db = dbInicializar();
       var list="";
       var row = null;
-      db.transaction(function(tx) {
-        tx.executeSql('CREATE TABLE IF NOT EXISTS config (id integer primary key, rancho text, vinedo text, variedad text, bloque text, anada text, ranchoName text, vinedoName text, variedadName text, bloqueName text, anadaName text)');
-      });
-    db.transaction(function(t) {
-      t.executeSql("SELECT * FROM config", [], function(transaction, results) {
-          if(results.rows.length){
-              for(var i = 0; i < results.rows.length; i++) {
-                  row = results.rows.item(i);
-                  if(module == 1){
-                    maduracionRegister(row.rancho, row.vinedo, row.variedad, row.bloque, row.anada,parameters.fecha,parameters.solidos,parameters.ph,parameters.at,parameters.brph,parameters.brat,0, row.ranchoName, row.vinedoName, row.variedadName, row.bloqueName, row.anadaName);                    
-                    Materialize.toast('Maduración registrada.', 1500);
-                    maduraIndex();
-                  }
-                  else if(module == 2){
-                    pesoRegister(row.rancho, row.vinedo, row.variedad, row.bloque, row.anada, row.ranchoName, row.vinedoName, row.variedadName, row.bloqueName, row.anadaName, parameters.fecha, parameters.costoUva, parameters.pesoTotalNeto, parameters.totalCajas, parameters.cajasMuestra, parameters.taraCaja, parameters.pesoPromCaja, parameters.pesoPromNeto, parameters.pesoMuestra, 0);
+      db.transaction(function(t) {
+          t.executeSql("SELECT * FROM config", [], function(transaction, results) {
+              if(results.rows.length){
+                  for(var i = 0; i < results.rows.length; i++) {
+                      row = results.rows.item(i);
+                      if(module == 1){
+                        maduracionRegister(row.rancho, row.vinedo, row.variedad, row.bloque, row.anada,parameters.fecha,parameters.solidos,parameters.ph,parameters.at,parameters.brph,parameters.brat,0, row.ranchoName, row.vinedoName, row.variedadName, row.bloqueName, row.anadaName);                    
+                        Materialize.toast('Maduración registrada.', 1500);
+                        maduraIndex();
+                      }
+                      else if(module == 2){
+                        pesoRegister(row.rancho, row.vinedo, row.variedad, row.bloque, row.anada, row.ranchoName, row.vinedoName, row.variedadName, row.bloqueName, row.anadaName, parameters.fecha, parameters.costoUva, parameters.pesoTotalNeto, parameters.totalCajas, parameters.cajasMuestra, parameters.taraCaja, parameters.pesoPromCaja, parameters.pesoPromNeto, parameters.pesoMuestra, 0);
+                      }
                   }
               }
-          }
-          else{
-              Materialize.toast('Primero asigne una configuración ', 1500);
-          }
-      });
+              else{
+                  Materialize.toast('Primero asigne una configuración ', 1500);
+              }
+          });
       });
   }
 

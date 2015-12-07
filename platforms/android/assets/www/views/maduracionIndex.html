@@ -101,8 +101,17 @@
                   <input id="brat" type="text" class="browser-default"  disabled="true" class="validate">
               </div>        
           <br> <a class="waves-effect waves-light btn " onclick="saveMaduracion();">Registrar</a>
+          <p id='noNumEditSolidos' class="textRojo">
+            Verifique que Solidos Solubles esten en el rango de 0 a 28.
+          </p>
+          <p id='noNumEditAt' class="textRojo">
+            Verifique que AT esten en el rango de 0 a 20.
+          </p>
+          <p id='noNumEditPh' class="textRojo">
+            Verifique que Ph esten en el rango de 2 a 4.
+          </p>
 
-      </div>
+        </div>
     </div>
 </div>
 
@@ -173,7 +182,6 @@
         <ul>
           <li><a class="btn-floating red"  onclick="deleteRow();"><i class="fa fa-trash-o"></i></a></li>
           <li><a class="btn-floating yellow darken-1" onclick="editarMaduracion();"><i class="fa fa-pencil"></i></a></li>
-          <li><a class="btn-floating green" onclick="maduraIndex();"><i class="fa fa-arrow-left"></i></a></li>
         </ul>
       </div>
 
@@ -227,7 +235,7 @@
               <div class="input-field col s12">
                   <input id="editbrat" type="text" class="browser-default"  disabled="true" class="validate">
               </div>        
-          <br> <a class="waves-effect waves-light btn " onclick="updatePeso();">Actualizar</a>
+          <br> <a class="waves-effect waves-light btn " onclick="updateMaduracion();">Actualizar</a>
 
       </div>
     </div>

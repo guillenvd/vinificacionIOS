@@ -13,7 +13,6 @@
             if(($(this).val().indexOf('.') !== -1 && event.keyCode == 190)  || ( $(this).val().indexOf('-') !== -1 && event.keyCode == 189)){
                event.preventDefault();
             }
-
         });
         
         rowFermentacion();
