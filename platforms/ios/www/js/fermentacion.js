@@ -3,16 +3,26 @@
 		$('#view').hide(); 
     $('#noNum').hide(); 
 		$('#editar').hide(); 
-        $("#grados,#temperatura,#edittemperatura,#editgrados").keyup(function (event) {
+        $("#grados,#temperatura").keyup(function (event) {
           var id = $(this).attr('id'); 
-          var val = $(id).val();
+          var val = $('#'+id).val();
+          console.log(val);
           if(isNaN(val))
             $('#noNum').show()
           else 
             $('#noNum').hide()
         });
+        $("#edittemperatura,#editgrados").keyup(function (event) {
+          var id = $(this).attr('id'); 
+          var val = $('#'+id).val();
+          console.log(val);
+          if(isNaN(val))
+            $('#noNumEdit').show()
+          else 
+            $('#noNumEdit').hide()
+        });
 
-        
+
         rowFermentacion();
    });
 
