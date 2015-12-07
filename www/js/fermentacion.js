@@ -3,23 +3,13 @@
 		$('#view').hide(); 
     $('#noNum').hide(); 
 		$('#editar').hide(); 
-        $("#grados,#temperatura").keyup(function (event) {
-          var expreg = /[-]?\d+(\.\d{1,2})?/g;
+        $("#grados,#temperatura,#edittemperatura,#editgrados").keyup(function (event) {
           var id = $(this).attr('id'); 
           var val = $(id).val();
-          if(expreg.test(val))
-            $('noNum').hide();
+          if(isNaN(val))
+            $('#noNum').show()
           else 
-            $('noNum').show();  
-        });
-        $("#edittemperatura,#editgrados").keyup(function (event) {
-          var expreg = /[-]?\d+(\.\d{1,2})?/g;
-          var id = $(this).attr('id'); 
-          var val = $(id).val();
-          if(expreg.test(val))
-            $('noNumEdit').hide();
-          else 
-            $('noNumEdit').show();  
+            $('#noNum').hide()
         });
 
         
