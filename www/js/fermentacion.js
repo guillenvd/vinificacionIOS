@@ -5,7 +5,8 @@
 		$('#editar').hide(); 
         $("#grados,#temperatura,#edittemperatura,#editgrados").keyup(function (event) {
           var id = $(this).attr('id'); 
-          var val = $(id).val();
+          var val = $('#'+id).val();
+          console.log(val);
           if(isNaN(val))
             $('#noNum').show()
           else 
