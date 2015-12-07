@@ -3,17 +3,25 @@
 		$('#view').hide(); 
     $('#noNum').hide(); 
 		$('#editar').hide(); 
-        $("#grados,#temperatura,#edittemperatura,#editgrados").keydown(function (event) {
-            if (event.shiftKey == true) {
-               event.preventDefault();
-            }
-            if ( !( (event.keyCode >= 48 && event.keyCode <= 57) || (event.keyCode >= 96 && event.keyCode <= 105) || event.keyCode == 8 || event.keyCode == 9 || event.keyCode == 37 || event.keyCode == 39 || event.keyCode == 46 || event.keyCode == 190|| event.keyCode == 189 ) ) {
-               event.preventDefault();
-            }
-            if(($(this).val().indexOf('.') !== -1 && event.keyCode == 190)  || ( $(this).val().indexOf('-') !== -1 && event.keyCode == 189)){
-               event.preventDefault();
-            }
+        $("#grados,#temperatura").keyup(function (event) {
+          var expreg = /[-]?\d+(\.\d{1,2})?/g;
+          var id = $(this).attr('id'); 
+          var val = $(id).val();
+          if(expreg.test(val))
+            $('noNum').hide();
+          else 
+            $('noNum').show();  
         });
+        $("#edittemperatura,#editgrados").keyup(function (event) {
+          var expreg = /[-]?\d+(\.\d{1,2})?/g;
+          var id = $(this).attr('id'); 
+          var val = $(id).val();
+          if(expreg.test(val))
+            $('noNumEdit').hide();
+          else 
+            $('noNumEdit').show();  
+        });
+
         
         rowFermentacion();
    });

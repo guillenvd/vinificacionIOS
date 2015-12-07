@@ -29,7 +29,7 @@
             $('#pesoTotalNeto').removeProp( "disabled" )
           }       
         });
-
+rowPeso();
   });
 
 /*   FUNCION PARA SOLO MOSTRAR LA SECCIÓN DE ALTA DE CALCULO DE PESO   */
