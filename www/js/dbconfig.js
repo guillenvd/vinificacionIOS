@@ -77,7 +77,8 @@ function rowConfig(){
             setTimeout(function(){  $( "#vinedo" ).val(row.vinedo);  }, 600);
             setTimeout(function(){   rowSublote(); }, 700);
             setTimeout(function(){  $( "#variedad" ).val(row.variedad); rowBloque(); }, 860);
-            setTimeout(function(){  $( "#bloque" ).val(row.bloque); }, 960);
+            setTimeout(function(){  $( "#bloque" ).val(row.bloque); }, 870);
+            console.log(ow.bloque);
       }
     });
   });
