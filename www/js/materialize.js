@@ -2715,7 +2715,7 @@ $(document).ready(function(){
 
   // Select Plugin
   $.fn.material_select = function (callback) {
-    $(this).each(function(){
+    $(this).each(function(i){
       $select = $(this);
 
       if ( $select.hasClass('browser-default')) {
@@ -2779,7 +2779,10 @@ $(document).ready(function(){
       // Wrap Elements
       $select.wrap(wrapper);
       // Add Select Display Element
-      var dropdownIcon = $('<span class="caret">&#9660;</span>');
+
+      
+	  $("#iconCarret"+i).remove();
+      var dropdownIcon = $('<span class="caret" id="iconCarret'+i+'">&#9660;</span>');
       if ( $select.is(':disabled') )
         dropdownIcon.addClass('disabled');
 
