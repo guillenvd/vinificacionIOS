@@ -6,7 +6,6 @@
         $("#grados,#temperatura").keyup(function (event) {
           var id = $(this).attr('id'); 
           var val = $('#'+id).val();
-          console.log(val);
           if(isNaN(val))
             $('#noNum').show()
           else 
@@ -15,14 +14,11 @@
         $("#edittemperatura,#editgrados").keyup(function (event) {
           var id = $(this).attr('id'); 
           var val = $('#'+id).val();
-          console.log(val);
           if(isNaN(val))
             $('#noNumEdit').show()
           else 
             $('#noNumEdit').hide()
         });
-
-
         rowFermentacion();
    });
 
@@ -63,15 +59,17 @@
                 $('#btns').hide();
               }
               $('#viewfecha').empty(); 
-            $('#viewvinoBase').empty();
-            $('#viewgrados').empty();
-            $('#viewtemperatura').empty();
+              $('#viewhora').empty(); 
+              $('#viewvinoBase').empty();
+              $('#viewgrados').empty();
+              $('#viewtemperatura').empty();
 
-            $('#viewfecha').append(row.fecha); 
-            $('#viewvinoBase').append(row.vinoBase);
-            $('#viewgrados').append(row.grados);
-            $('#viewtemperatura').append(row.temperatura);
-            
+              $('#viewfecha').append(row.fecha); 
+              $('#viewhora').append(row.hora); 
+              $('#viewvinoBase').append(row.vinoBase);
+              $('#viewgrados').append(row.grados);
+              $('#viewtemperatura').append(row.temperatura);
+              
           }
          });
         });
@@ -88,49 +86,43 @@
             selectMonths: true, 
             selectYears: 15
         });
-       var db = dbInicializar();
+         var db = dbInicializar();
         db.transaction(function(t) {
         t.executeSql("SELECT * FROM fermentacion where id = ?", [parseInt($('#viewId').val())], function(transaction, results) {
+          $('select').material_select('destroy');
           for (var i = 0; i < results.rows.length; i++) {
                 var row = results.rows.item(i);
                 $('#editfecha').val(row.fecha); 
+                $('#edithora').val(row.hora); 
                 $('#editvinobase').val(row.vinoBase);
                 $('#editgrados').val(row.grados);
                 $('#edittemperatura').val(row.temperatura);
             }
+            $('select').material_select();
+
          });
         });
     }
 
     function updateFermentacion() {
-    if($('#editfecha').val() !="" && $('#editgrados').val() !="" && $('#edittemperatura').val() !="" ){
-        if( (!isNaN($('#editgrados').val()) &&  !isNaN($('#edittemperatura').val()) ) && ( (parseFloat($('#editgrados').val())>=-2 && parseFloat($('#editgrados').val()) <=28) && (parseFloat($('#edittemperatura').val())>=-2 && parseFloat($('#edittemperatura').val()) <=28) ) ){
-                var id = parseInt($('#viewId').val());
-                var db = dbInicializar();
-                db.transaction(function(tx) {
-                    tx.executeSql("UPDATE fermentacion SET fecha = ?, grados = ?, temperatura = ? WHERE id = ?",[$('#editfecha').val(),$('#editgrados').val(), $('#edittemperatura').val(),id], 
-                    function(tx, result) {
-                        Materialize.toast('Actualización correcta.', 4000);
-                        viewFermentacion($('#viewId').val());
-                        $('#viewId').val('');             
-                    }, 
-                    function(error) {
-                        console.log('transaction error: ' + error.message);
-                    });
-                });
-
+        var parameters = {
+                          fecha: $('#editfecha').val(),
+                          hora: $('#edithora').val(),
+                          grados: $('#editgrados').val(),
+                          temperatura: $('#edittemperatura').val()
+                        };
+        if(parameters.fecha !="" && parameters.hora !="" && parameters.grados !="" && parameters.temperatura !="" ){
+            if( (!isNaN(parameters.grados) &&  !isNaN(parameters.temperatura) ) && ( (parseFloat(parameters.grados)>=-2 && parseFloat(parameters.grados) <=28) && (parseFloat(parameters.temperatura)>=-2 && parseFloat(parameters.temperatura) <=28) ) ){
+              validateFermentacion(parameters,2);
+            }
+            else{
+                $('#noNumEdit').show();
+            }
         }
         else{
-            $('#noNumEdit').show();
-        }
+              Materialize.toast('No puede dejar campos vacios', 1500);
+        }       
     }
-    else{
-          Materialize.toast('No puede dejar campos vacios', 1500);
-    }
-
-    
-       
-  }
     function rowFermentacion(){
       var db = dbInicializar();
       var html="";
@@ -158,16 +150,16 @@
 
 	function saveRegister() {
 		var parameters = {
-			monitoreoId:$('#monitoreo option:selected').val(),
-			fecha:$('#fecha').val(),
-			temperatura:$('#temperatura').val(),
-			grados:$('#grados').val(),
-            vinoBase: $('#monitoreo option:selected').text()
-
-		};
-		if(parameters.monitoreoId !="" && parameters.fecha !="" && parameters.temperatura !="" && parameters.grados !="" ){
+                        fecha:$('#fecha').val(),
+                        hora:$('#hora').val(),
+                  			monitoreoId:$('#monitoreo option:selected').val(),
+                        temperatura:$('#temperatura').val(),
+                  			grados:$('#grados').val(),
+                        vinoBase: $('#monitoreo option:selected').text()
+                		};
+		if(parameters.monitoreoId !="" && parameters.fecha !="" && parameters.hora !=""  && parameters.temperatura !="" && parameters.grados !="" ){
         if( (!isNaN(parameters.temperatura) &&  !isNaN(parameters.grados) ) && ( (parseFloat(parameters.temperatura)>=-2 && parseFloat(parameters.temperatura) <=28) && (parseFloat(parameters.grados)>=-2 && parseFloat(parameters.grados) <=28) ) ){
-          fermentacionRegister(parameters.monitoreoId, parameters.fecha, parameters.grados, parameters.temperatura, parameters.vinoBase,0);
+          validateFermentacion(parameters,1);
         }
         else{
             $('#noNum').show();
@@ -177,6 +169,50 @@
 	        Materialize.toast('No puede dejar campos vacios', 1500);
 		}
 	}
+
+
+function validateFermentacion(parameters,caseFementacion){
+  var db = dbInicializar();
+  var response = 0;
+  console.log(parameters);
+  db.transaction(function(t) {
+    t.executeSql("SELECT * FROM fermentacion", [], function(transaction, results) {
+      for(var i = 0; i < results.rows.length; i++) {
+          var row = results.rows.item(i);
+            if(row.fecha == parameters.fecha && parameters.hora == row.hora){  
+              response = 1;
+            }
+        }
+        if(parseInt(response)==0){
+          console.log(1);
+          fermentacionRegister(parameters.monitoreoId, parameters.fecha, parameters.hora, parameters.grados, parameters.temperatura, parameters.vinoBase,0);
+        }else{
+          Materialize.toast('Ya existe una fecha registrada para este vino.', 1500);
+        }
+    },function(txt,results) {
+      console.log("1");
+    }, function (error) {
+      console.log("2"+error);
+    });
+  });
+}
+
+function updateRegister(parameters) {
+      var id = parseInt($('#viewId').val());
+      var db = dbInicializar();
+      db.transaction(function(tx) {
+          tx.executeSql("UPDATE fermentacion SET fecha = ?, hora = ?, grados = ?, temperatura = ? WHERE id = ?",[parameters.fecha,parameters.hora,parameters.grados, parameters.temperatura,id], 
+          function(tx, result) {
+              Materialize.toast('Actualización correcta.', 4000);
+              viewFermentacion($('#viewId').val());
+              $('#viewId').val('');             
+          }, 
+          function(error) {
+              console.log('transaction error: ' + error.message);
+          });
+      });
+
+}
 
     function deleteRow(){
         var toastContent = '<span>¿Desea borrar este registro?<a class="waves-effect waves-teal btn-flat" style=\'color:#ffdd21;\' onclick="confirmDelte();">Si</a></span>';

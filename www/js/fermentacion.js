@@ -6,7 +6,6 @@
         $("#grados,#temperatura").keyup(function (event) {
           var id = $(this).attr('id'); 
           var val = $('#'+id).val();
-          console.log(val);
           if(isNaN(val))
             $('#noNum').show()
           else 
@@ -15,7 +14,6 @@
         $("#edittemperatura,#editgrados").keyup(function (event) {
           var id = $(this).attr('id'); 
           var val = $('#'+id).val();
-          console.log(val);
           if(isNaN(val))
             $('#noNumEdit').show()
           else 
@@ -176,31 +174,25 @@
 function validateFermentacion(parameters,caseFementacion){
   var db = dbInicializar();
   var response = 0;
+  console.log(parameters);
   db.transaction(function(t) {
     t.executeSql("SELECT * FROM fermentacion", [], function(transaction, results) {
       for(var i = 0; i < results.rows.length; i++) {
           var row = results.rows.item(i);
-          if(caseFementacion  == 1){
             if(row.fecha == parameters.fecha && parameters.hora == row.hora){  
               response = 1;
             }
-          }
-          else if(caseFementacion == 2){
-            if(row.fecha == parameters.fecha && parameters.hora == row.hora && row.id != parseInt($('#viewId').val()) ){  
-              response = 1;
-            }
-          }
         }
         if(parseInt(response)==0){
-          if(caseFementacion == 1){
-            fermentacionRegister(parameters.monitoreoId, parameters.fecha, parameters.hora, parameters.grados, parameters.temperatura, parameters.vinoBase,0);
-          }
-          else if(caseFementacion == 2 ){
-            updateRegister(parameters);
-          }
+          console.log(1);
+          fermentacionRegister(parameters.monitoreoId, parameters.fecha, parameters.hora, parameters.grados, parameters.temperatura, parameters.vinoBase,0);
         }else{
           Materialize.toast('Ya existe una fecha registrada para este vino.', 1500);
         }
+    },function(txt,results) {
+      console.log("1");
+    }, function (error) {
+      console.log("2"+error);
     });
   });
 }

@@ -24,11 +24,12 @@ function dropTable(table) {
       var variedadName = $('#variedad option:selected').text();
       var bloqueName = $('#bloque option:selected').text();
       var anadaName = $('#anada option:selected').text();
+      console.log(bloque+''+variedad);
       if(rancho != '' && vinedo != '' && variedad != '' && bloque != '' && anada){
         configRegister(rancho, vinedo, variedad, bloque, anada,ranchoName, vinedoName, variedadName, bloqueName, anadaName);
       }
       else{
-         Materialize.toast('No puede dejar campos vacios de la configuracion.', 1500);
+         Materialize.toast('No puede dejar campos vacios en configuracion.', 1500);
       }
     }
 
@@ -74,11 +75,11 @@ function rowConfig(){
             var row = results.rows.item(i);
             rowPredio();
             setTimeout(function(){  $( "#rancho" ).val(row.rancho); $( "#anada" ).val(row.anada);  rowLote(); }, 520);
-            setTimeout(function(){  $( "#vinedo" ).val(row.vinedo);  }, 600);
-            setTimeout(function(){   rowSublote(); }, 700);
-            setTimeout(function(){  $( "#variedad" ).val(row.variedad); rowBloque(); }, 860);
-            setTimeout(function(){  $( "#bloque" ).val(row.bloque); }, 960);
-
+            setTimeout(function(){  $( "#vinedo" ).val(row.vinedo);  }, 620);
+            setTimeout(function(){   rowSublote(); }, 720);
+            setTimeout(function(){  $( "#variedad" ).val(row.variedad); rowBloque(); }, 820);
+            setTimeout(function(){ $('select').material_select('destroy');$( "#bloque" ).val(row.bloque);$('select').material_select();}, 920);
+            
       }
     });
   });
@@ -90,17 +91,19 @@ function rowAnada(){
   db.transaction(function(t) {
     t.executeSql("SELECT * FROM anada", [], function(transaction, results) {
       var anada = document.getElementById("anada");
+      $('select').material_select('destroy');           
       for (var i = 0; i < results.rows.length; i++) {
-        var row = results.rows.item(i);
-       // document.getElementById("data").innerHTML += row.nombre + '' + row.ide + '<br>';
-                anada.innerHTML+='<option value="'+row.ide+'">'+row.nombre+'</option>';  
+            var row = results.rows.item(i);
+            anada.innerHTML+='<option value="'+row.ide+'">'+row.nombre+'</option>';  
       }
+      $('select').material_select(); 
     });
   });
 }
 
 
 function rowPredio(){
+  $( "#config" ).addClass( "disabled" );
   var db = dbInicializar();
   var list="";
   db.transaction(function(t) {
@@ -113,11 +116,14 @@ function rowPredio(){
           Lote.innerHTML='<option value="">Seleccione un Rancho primero</option>';
           Sublote.innerHTML='<option value="">Seleccione un Vinedo primero</option>';
           Bloque.innerHTML='<option value="">Seleccione una Variedad primero</option>';
+      $('select').material_select('destroy');           
       for (var i = 0; i < results.rows.length; i++) {
         var row = results.rows.item(i);
        // document.getElementById("data").innerHTML += row.nombre + '' + row.ide + '<br>';
                 predio.innerHTML+='<option value="'+row.ide+'">'+row.nombre+'</option>';  
-      }
+      }      
+      $('select').material_select();           
+
     });
   });
 }
@@ -133,6 +139,7 @@ function rowLote() {
           Lote.innerHTML='<option value="">Seleccione un vinedo</option>';
           Sublote.innerHTML='<option value="">Seleccione un vinedo primero</option>';
           Bloque.innerHTML='<option value="">Seleccione una Variedad primero</option>';
+      $('select').material_select('destroy');           
 
       for (var i = 0; i < results.rows.length; i++) {
             var row = results.rows.item(i);
@@ -144,6 +151,7 @@ function rowLote() {
       else if(predio==""){
           Lote.innerHTML='<option value="">Seleccione primero un Rancho</option>';
       }
+      $('select').material_select();           
 
 
     });
@@ -160,17 +168,18 @@ function rowSublote(){
         var Bloque = document.getElementById("bloque");
           Sublote.innerHTML='<option value="">Seleccione una Variedad</option>';
           Bloque.innerHTML='<option value="">Seleccione primero un viñedo</option>';
-
+      $('select').material_select('destroy');           
       for (var i = 0; i < results.rows.length; i++) {
               var row = results.rows.item(i);
               Sublote.innerHTML+='<option value="'+row.ide+'">'+row.nombre+'</option>';
       }
       if( results.rows.length == 0 ){
-          Lote.innerHTML='<option value="">No hay variedad</option>';
+          Sublote.innerHTML='<option value="">No hay variedad</option>';
         }
-      else if(Lote==""){
-          Lote.innerHTML='<option value="">Seleccione primero un vinedo</option>';
+      else if(Sublote==""){
+          Sublote.innerHTML='<option value="">Seleccione primero un vinedo</option>';
       }
+      $('select').material_select();           
     });
   });
 }
@@ -182,26 +191,31 @@ function rowBloque() {
     t.executeSql("SELECT * FROM bloque where sublote  = ? ", [Sublote], function(transaction, results) {
         var Varietal = document.getElementById("bloque");
           Varietal.innerHTML='<option value="">Seleccione un bloque</option>';
+      $('select').material_select('destroy');           
       for (var i = 0; i < results.rows.length; i++) {
               var row = results.rows.item(i);
+              console.log(row.ide);
               Varietal.innerHTML+='<option value="'+row.ide+'">'+row.nombre+'</option>';
       }
+
       if( results.rows.length == 0 ){
-          Lote.innerHTML='<option value="">No hay Bloques</option>';
+          Varietal.innerHTML='<option value="">No hay Bloques</option>';
         }
       else if(Sublote==""){
-          Lote.innerHTML='<option value="">Seleccione primero un vinedo</option>';
+          Varietal.innerHTML='<option value="">Seleccione primero un vinedo</option>';
       }
+      $('select').material_select();           
+      $('#config').removeClass( "disabled" );
     });
   });
 }
 
 function rowMonitoreo(){
-  $('select').material_select('destroy');
   var db = dbInicializar();
   var list="";
   db.transaction(function(t) {
         t.executeSql("SELECT * FROM monitoreo", [], function(transaction, results) {
+          $('select').material_select('destroy');           
           var monitoreo = document.getElementById("monitoreo");
           for (var i = 0; i < results.rows.length; i++) {
                 var row = results.rows.item(i);
@@ -320,11 +334,11 @@ function pesoRegister(rancho, vinedo, variedad, bloque, anada, ranchoName, vined
     });
   }
 
-function fermentacionRegister(monitoreoId, fecha, grados, temperatura,vinoBase, ide) {
+function fermentacionRegister(monitoreoId, fecha, hora, grados, temperatura,vinoBase, ide) {
   var db = dbInicializar();
   db.transaction(function(tx) {
-    tx.executeSql('CREATE TABLE IF NOT EXISTS fermentacion (id integer primary key, ide text, monitoreoId text, fecha text, grados text, temperatura text, vinoBase text)');
-    tx.executeSql("INSERT INTO fermentacion (monitoreoId, fecha, grados, temperatura, vinoBase, ide) VALUES (?,?,?,?,?,?)", [monitoreoId, fecha, grados, temperatura,vinoBase,ide],
+    tx.executeSql('CREATE TABLE IF NOT EXISTS fermentacion (id integer primary key, ide text, monitoreoId text, fecha text, hora text, grados text, temperatura text, vinoBase text)');
+    tx.executeSql("INSERT INTO fermentacion (monitoreoId, fecha, hora, grados, temperatura, vinoBase, ide) VALUES (?,?,?,?,?,?,?)", [monitoreoId, fecha, hora, grados, temperatura,vinoBase,ide],
     function(){
       fermentacionIndex() 
       Materialize.toast('Registro creado con exito', 1500);

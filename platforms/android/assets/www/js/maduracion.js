@@ -166,7 +166,6 @@
 
 /************* funcion para validar los campos antes de guardar *************/
 	function saveMaduracion(){
-		  rowConfig();
 		 var parameters = { fecha:$('#fecha').val(), 
 		 					solidos:$('#solidos').val(),
 		 					ph:$('#ph').val(), 
@@ -252,6 +251,7 @@ function rowMaduracion(){
 	        });
 	}
 function updateMaduracion() {
+	if($('#editfecha').val() != '' && $('#editsolidos').val() != '' && $('#editph').val() != '' && $('#editat').val() != ''){
 		var id = parseInt($('#viewId').val());
 		var db = dbInicializar();
         db.transaction(function(tx) {
@@ -260,7 +260,10 @@ function updateMaduracion() {
         Materialize.toast('Registro Actualizada.', 4000);
         viewMaduracion( $('#viewId').val());
         $('#viewId').val('');
-
+    }
+    else{
+    	Materialize.toast('No puede dejar campos vacios', 1500);
+    }
 }
 
 
@@ -279,9 +282,8 @@ function validateMaduracion(parameters){
        	if(parseInt(response)==0){
 		   getConfig(parameters,1);/// se envian los campos para ser guardados
        	}else{
-		    Materialize.toast('Ya existe una fecha igual registrada para este bloque.', 1500);
+		    Materialize.toast('Ya existe una fecha registrada para este bloque.', 1500);
        	}
     });
   });
-  
 }

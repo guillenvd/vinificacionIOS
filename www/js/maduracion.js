@@ -166,7 +166,6 @@
 
 /************* funcion para validar los campos antes de guardar *************/
 	function saveMaduracion(){
-		  rowConfig();
 		 var parameters = { fecha:$('#fecha').val(), 
 		 					solidos:$('#solidos').val(),
 		 					ph:$('#ph').val(), 

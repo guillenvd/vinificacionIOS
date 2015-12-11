@@ -41,7 +41,8 @@ rowPeso();
           initBack('peso');
           rowPredio();
           rowAnada();
-          rowConfig(); 
+          setTimeout(function(){ rowConfig(); }, 500);
+
     } 
 
 /* FUNCION PARA AGREGAR UNA NUEVA CAJA PARA EL CALCULO DESCONOCIDO TOTAL NETO  */

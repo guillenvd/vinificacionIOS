@@ -27,7 +27,7 @@
     <div class="row">
       <div class="col s12">
         <ul class="tabs">
-          <li class="tab col s6 waves-effect waves-light"><a href="#confi">Configuración</a></li>
+          <li class="tab col s6 waves-effect waves-light disabled" id="config"><a href="#confi">Configuración</a></li>
           <li class="tab col s6 waves-effect waves-light"><a class="active" href="#regi">Registro</a></li>
         </ul>
       </div>
@@ -35,32 +35,32 @@
             <h4>Configuración</h4>
             <div class="input-field col s12">
                   <label>Rancho:</label><br><br>
-                  <select class="browser-default" id="rancho" onchange="rowLote();">
+                  <select id="rancho" onchange="rowLote();">
                     <option value="" selected>Seleccione Rancho</option>
                   </select>
             </div>
             <div class="input-field col s12">
                   <label>Viñedo:</label><br><br>
-                  <select class="browser-default"  id="vinedo" onchange="rowSublote();">
+                  <select  id="vinedo" onchange="rowSublote();">
                     <option value="" selected>Seleccione Viñedo</option>
                   </select>
             </div>
             <div class="input-field col s12">
                   <label>Variedad:</label><br><br>
-                  <select class="browser-default" id="variedad" onchange="rowBloque();">
+                  <select id="variedad" onchange="rowBloque();">
                     <option value="" selected>Seleccione Variedad</option>
                   </select>
             </div>
             <div class="input-field col s12">
                   <label>Bloque:</label><br><br>
-                  <select class="browser-default" id="bloque">
+                  <select id="bloque">
                     <option value="" selected>Seleccione Bloque</option>
                   </select>
             </div>
 
             <div class="input-field col s12">
                   <label>Añada:</label><br/><br/>
-                  <select class="browser-default" id="anada">
+                  <select id="anada">
                       <option value="" selected>Seleccione Añada</option>
                   </select><br/>  
                   <a class="waves-effect waves-light btn" onclick="saveConfig();">Guardar</a>
@@ -74,7 +74,7 @@
           </div>
           <div class="input-field col s12">
               <input type="text" id='costoUva'>
-              <label for="input_text">Costo de la uva (Pesos)</label>
+              <label for="input_text">Costo de la uva (Pesos * Kg)</label>
           </div>
           <div class="input-field col s12">
             <label for="input_text">Peso total Neto</label>
@@ -203,7 +203,7 @@
                 <td id='viewfecha'></td>
             </tr>
             <tr>
-                <th>Costo de la uva (Pesos)</th>
+                <th>Costo de la uva (Pesos * Kg)</th>
                 <td id='viewcostoUva'></td>
             </tr>
             <tr>
@@ -286,7 +286,7 @@
           </div>
           <div class="input-field col s12">
               <input type="text" id='editcostoUva'>
-              <label class="active" for="input_text">Costo de la uva (Pesos)</label>
+              <label class="active" for="input_text">Costo de la uva (Pesos * Kg)</label>
           </div>
           <div class="input-field col s12">
             <label class="active" for="input_text">Peso total Neto</label>
