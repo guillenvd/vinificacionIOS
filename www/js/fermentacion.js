@@ -106,6 +106,7 @@
 
     function updateFermentacion() {
         var parameters = {
+                          id: parseInt($('#viewId').val()) ,
                           fecha: $('#editfecha').val(),
                           hora: $('#edithora').val(),
                           grados: $('#editgrados').val(),
@@ -149,7 +150,7 @@
 
 
 	function saveRegister() {
-		var parameters = {
+		var parameters = {  id:0,
                         fecha:$('#fecha').val(),
                         hora:$('#hora').val(),
                   			monitoreoId:$('#monitoreo option:selected').val(),
@@ -176,24 +177,27 @@ function validateFermentacion(parameters,caseFementacion){
   var response = 0;
   console.log(parameters);
   db.transaction(function(t) {
+    t.executeSql('CREATE TABLE IF NOT EXISTS fermentacion (id integer primary key, ide text, monitoreoId text, fecha text, hora text, grados text, temperatura text, vinoBase text)');
     t.executeSql("SELECT * FROM fermentacion", [], function(transaction, results) {
       for(var i = 0; i < results.rows.length; i++) {
           var row = results.rows.item(i);
-            if(row.fecha == parameters.fecha && parameters.hora == row.hora){  
+            if( parameters.id != row.id && row.fecha == parameters.fecha && parameters.hora == row.hora){  
               response = 1;
             }
         }
         if(parseInt(response)==0){
           console.log(1);
-          fermentacionRegister(parameters.monitoreoId, parameters.fecha, parameters.hora, parameters.grados, parameters.temperatura, parameters.vinoBase,0);
+          if(caseFementacion==1)
+            fermentacionRegister(parameters.monitoreoId, parameters.fecha, parameters.hora, parameters.grados, parameters.temperatura, parameters.vinoBase,0);
+          else if(caseFementacion == 2)
+            updateRegister(parameters) 
         }else{
           Materialize.toast('Ya existe una fecha registrada para este vino.', 1500);
         }
-    },function(txt,results) {
-      console.log("1");
-    }, function (error) {
-      console.log("2"+error);
+    },function (error) {
+      console.log(error);
     });
+
   });
 }
 

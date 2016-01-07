@@ -335,19 +335,25 @@ function pesoRegister(rancho, vinedo, variedad, bloque, anada, ranchoName, vined
   }
 
 function fermentacionRegister(monitoreoId, fecha, hora, grados, temperatura,vinoBase, ide) {
+  console.log(monitoreoId+"monitoreoId");
+  console.log(fecha+"fecha");
+  console.log(hora+"hora");
+  console.log(grados+"grados");
+  console.log(temperatura+"temperatura");
+  console.log(vinoBase+"vinoBase");
+  console.log(ide+"ide");
   var db = dbInicializar();
   db.transaction(function(tx) {
-    
-    tx.executeSql('CREATE TABLE IF NOT EXISTS fermentacion (id integer primary key, ide text, monitoreoId text, fecha text, hora text, grados text, temperatura text, vinoBase text)');
-    tx.executeSql("INSERT INTO fermentacion (monitoreoId, fecha, hora, grados, temperatura, vinoBase, ide) VALUES (?,?,?,?,?,?,?)", [monitoreoId, fecha, hora, grados, temperatura,vinoBase,ide],
-    function(){
-      fermentacionIndex() 
-      Materialize.toast('Registro creado con exito', 1500);
-    },
-    function () {
-      Materialize.toast('Algo salio mal.', 1500);
-    });
-
+            tx.executeSql('CREATE TABLE IF NOT EXISTS fermentacion (id integer primary key, ide text, monitoreoId text, fecha text, hora text, grados text, temperatura text, vinoBase text)');
+            tx.executeSql("INSERT INTO fermentacion (monitoreoId, fecha, hora, grados, temperatura, vinoBase, ide) VALUES (?,?,?,?,?,?,?)", [monitoreoId, fecha, hora, grados, temperatura,vinoBase,ide],
+                  function(){
+                    fermentacionIndex() 
+                    Materialize.toast('Registro creado con exito', 1500);
+                  },
+                  function () {
+                    Materialize.toast('Algo salio mal.', 1500);
+                  }
+                  );
   });
 }
 
